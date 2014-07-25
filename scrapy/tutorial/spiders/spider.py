@@ -12,6 +12,7 @@ class Movie(Item):
     name = Field()
     url = Field()
     rank = Field()
+    date = Field()
 
 #tgs = range(20)
 #tgs.remove(9)
@@ -34,6 +35,8 @@ def make_urls(tg):
 
     return urls
 
+import urlparse
+
 class RankSpider(BaseSpider):
     name = "rank"
     allowed_domains = ["movie.naver.com"]
@@ -44,6 +47,9 @@ class RankSpider(BaseSpider):
         self.start_urls = make_urls(self.tg)
 
     def parse(self, response):
+        parsed = urlparse.urlparse(response.url)
+        date = urlparse.parse_qs(parsed.query)['date']
+
         hxs = HtmlXPathSelector(response)
         items = []
 
@@ -55,6 +61,7 @@ class RankSpider(BaseSpider):
             movie['url'] = href
             movie['name'] = titles[index]
             movie['rank'] = index + 1
+            movie['date'] = date[0]
             items.append(movie)
 
         return items
