@@ -1,0 +1,6 @@
+*.pyc
+*.tar*
+*.jar
+*.json
+*.sql
+*.sqlite3
