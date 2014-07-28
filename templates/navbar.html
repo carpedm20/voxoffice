@@ -1,21 +1,19 @@
 {% load staticfiles %}
 
-<nav class="navbar navbar-inverse navbar-fixed-top header">
+<nav class="navbar navbar-fixed-top header">
   <div class="container">
-      <div class="navbar-header">
-
-        <a href="{% url 'core:index' %}" class="navbar-brand">Sermo admin</a>
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse1">
-          <i class="glyphicon glyphicon-search"></i>
-        </button>
-
-      </div>
-      <div class="collapse navbar-collapse" id="navbar-collapse1">
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="#" target="_ext">{{ user.username }}</a></li>
-          <li><a href="{% url 'account:sign_out' %}">Sign out</a></li>
-        </ul>
-      </div>  
+    <div class="navbar-header">
+      <a href="{% url 'core:index' %}" class="navbar-brand">FoxOffice</a>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <!--<li class="active"><a href="#">Home</a></li>-->
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+      </ul>
+    </div>  
   </div>
 </nav>
 

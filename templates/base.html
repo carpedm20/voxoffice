@@ -4,16 +4,25 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Admin page - {{ title }}</title>
+    <title>FoxOffice</title>
+
+    <!--
+    start : 2014-07-28 10:10 am
+                                   _           ____   ___
+      ___ __ _ _ __ _ __   ___  __| |_ __ ___ |___ \ / _ \
+     / __/ _` | '__| '_ \ / _ \/ _` | '_ ` _ \  __) | | | |
+    | (__ (_| | |  | |_) |  __/ (_| | | | | | |/ __/| |_| |
+     \___\__,_|_|  | .__/ \___|\__,_|_| |_| |_|_____|\___/
+                   |_|
+
+    end  : 2014-??-??
+    -->
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Loading Bootstrap -->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&subset=latin,greek' rel='stylesheet'>
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-
     <link href="{% static 'css/style.less' %}" rel="stylesheet/less" type="text/css">
-
-    <link rel="shortcut icon" href="images/favicon.ico">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
     <!--[if lt IE 9]>
@@ -21,39 +30,35 @@
       <script src="{% static 'js/respond.min.js' %}"></script>
     <![endif]-->
   </head>
-  <body id="dark-body">
-    {% if not user.is_authenticated %}
+
+  <body>
+    {% include 'navbar.html' %}
+
+    <div id="main">
       <div class="container">
-        {% block unauthenticated_content %} {% endblock %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+              {{ message }}
+              <button class="close" onclick="$('.alert').hide();">×</button>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        {% block content %} {% endblock %}
       </div>
-    {% else %}
-      {% include 'navbar.html' %}
+    </div>
 
+    <footer>
       <div class="container">
-        <div id="content">
-          {% if messages %}
-            {% for message in messages %}
-              <div class="alert alert-{{ message.tags }}">
-                {{ message }}
-                <button class="close" onclick="$('.alert').hide();">×</button>
-              </div>
-            {% endfor %}
-          {% endif %}
-
-          {% block content %} {% endblock %}
-        </div>
-
-        <div class="footer">
-          <div class="text-center">
-          </div>
+        <div id="carpedm20">
+          <p>Created by carpedm20</p>
         </div>
       </div>
-    {% endif %}
-    <!-- /.container -->
+    </footer>
 
     <script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap-twipsy.js' %}"></script>
     <script src="{% static 'js/script.js' %}"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.7.0/less.min.js"></script>
   </body>
