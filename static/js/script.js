@@ -3,7 +3,7 @@
   var h = 480;
 
   var data = d3.json("/static/data/data.json", function(error, root) {
-    var bodySelection = d3.select("body");
+    var bodySelection = d3.select("#FoxOffice");
 
     var svgSelection = bodySelection.append("svg")
           .attr("width", w)
