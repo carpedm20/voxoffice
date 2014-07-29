@@ -2,64 +2,58 @@
   var w = 650;
   var h = 480;
 
+  var data = [{year: 2006, books: 54},
+            {year: 2007, books: 43},
+            {year: 2008, books: 41},
+            {year: 2009, books: 44},
+            {year: 2010, books: 35}];
+
+  var barWidth = 40;
+  var width = (barWidth + 10) * data.length;
+  var height = 200;
+
+  var x = d3.scale.linear().domain([0, data.length]).range([0, width]);
+  var y = d3.scale.linear().domain([0, d3.max(data, function(d) { return d.books; })]).rangeRound([0, height]);
+
+  var barDemo = d3.select("#FoxOffice").
+    append("svg:svg").
+    attr("width", width).
+    attr("height", height);
+
+  barDemo.selectAll("rect").
+    data(data).
+    enter().
+    append("rect").
+    attr("x", function(d, i) { return x(i); }).
+    attr("y", function(d) { return height - y(d.books); }).
+    attr("height", function(d) { return y(d.books); }).
+    attr("width", barWidth).
+    attr("fill", "#2d578b");
+
+  barDemo.selectAll("text").
+    data(data).
+    enter().
+    append("svg:text").
+    attr("x", function(d, i) { return x(i); }).
+    attr("y", function(d) { return height - y(d.books); }).
+    attr("dx", +barWidth/2).
+    attr("dy", "1.2em").
+    attr("text-anchor", "middle").
+    text(function(d) { return d.books; }).
+    attr("fill", "white");
+
+  barDemo.selectAll("text.yAxis").
+    data(data).
+    enter().append("svg:text").
+    attr("x", function(d, i) { return x(i); }).
+    attr("y", height).
+    attr("dx", +barWidth/2).
+    attr("text-anchor", "middle").
+    attr("style", "font-size: 12px; font-family: Helvetica, sans-serif").
+    text(function(d) { return d.year; }).
+    attr("transform", "translate(0, 18)").
+    attr("class", "yAxis").attr("fill", "black");
+
   var data = d3.json("/static/data/data.json", function(error, root) {
-    var bodySelection = d3.select("#FoxOffice");
-
-    var svgSelection = bodySelection.append("svg")
-         .attr("width", w)
-         .attr("height", h).style("border", "1px solid black");
-
-    var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
-                    11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
-
-    bodySelection.selectAll("rect").data(dataset).enter().append("rect")
-                .attr("x", function (d, i) { return i*21; })
-                .attr("y", 0)
-                .attr("width", 20)
-                .attr("height", function (d) { return d*4; }).style("fill", "black");
-
-    /*var d = [1,2,3];
-    var p = bodySelection.selectAll("p").data(d).enter().append("p")
-              .text(function(d) { return "Data: " + d; });
-
-    console.log(p);
-
-    var r = [40, 20, 10];
-
-    var c = svgSelection.selectAll("p").data(r).enter().append("circle");
-
-    var cAttributes = c.attr("cx", w/2)
-                       .attr("cy", h/2)
-                       .attr("r", function(d) { return d; })
-                       .style("fill", function(d) {
-                         var returnColor;
-                         if (d === 40)
-                           returnColor = "green";
-                         else if (d === 20)
-                           returnColor = "purple";
-                         else if (d === 10)
-                           returnColor = "red";
-                         return returnColor;
-                       });
-
-    var spaceCircles = [30, 70, 110];
-    var circles = svgSelection.selectAll("ci")
-                              .data(spaceCircles)
-                              .enter()
-                              .append("circle");
-
-    var cAttributes = circles.attr("cx", function (d) { return d; })
-                             .attr("cy", function (d) { return d; })
-                             .attr("r", 20)
-                             .style("fill", function(d) {
-                                var returnColor;
-                                if (d === 30)
-                                  returnColor = "green";
-                                else if (d === 70)
-                                  returnColor = "purple";
-                                else if (d === 110)
-                                  returnColor = "red";
-                                return returnColor;
-                              });*/
   });
 })();
