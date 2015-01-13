@@ -1,8 +1,18 @@
+body {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
 nav .brand-logo {
   position: absolute;
   color: #fff;
   display: inline-block;
   font-size: 1.5rem;
   padding: 0;
-  margin-left: 50px;
 }
+
+ul.side-nav li a {
+  font-size: 1.2em;
+}
+
