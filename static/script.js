@@ -34,17 +34,14 @@ var data = [{"url": "/movie/bi/mi/basic.nhn?code=39470", "date": "20050208", "na
         maxdate = format(data[data.length-1]['date']);
 
     var x = d3.time.scale()
-        .domain([mindate, maxdate])
-        .range([padding, width - padding * 2]); 
+        .range([0, width]);
 
     var y = d3.scale.linear()
-        .domain([0, 100])
-        .range([height - padding, padding]); 
+        .range([height-10, 0]);
 
     var colorrange = ["#045A8D", "#2B8CBE", "#74A9CF", "#A6BDDB", "#D0D1E6", "#F1EEF6"];
     var z = d3.scale.ordinal()
         .range(colorrange);
-
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -67,4 +64,24 @@ var data = [{"url": "/movie/bi/mi/basic.nhn?code=39470", "date": "20050208", "na
         .attr("class", "xaxis")
         .attr("transform", "translate(0," + (height - padding) + ")")
         .call(xAxis);
+
+    data.forEach(function(d) {
+        d.date = format(d.date);
+        d.value = d.rank;
+    });
+
+    var stack = d3.layout.stack()
+        .offset("silhouette")
+        .values(function(d) { return d.values; })
+        .x(function(d) { return d.date; })
+        .y(function(d) { return d.value; });
+
+    var nest = d3.nest()
+        .key(function(d) { return d.key; });
+
+    var layers = stack(nest.entries(data));
+
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain([0, d3.max(data, function(d) { return d.y0 + d.y; })]);
+
 //});
