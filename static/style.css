@@ -37,3 +37,9 @@ ul.side-nav li a {
   fill: none;
   stroke: #000;
 }
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}

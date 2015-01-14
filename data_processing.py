@@ -2,7 +2,7 @@ import json
 import numpy as np
 from collections import defaultdict
 
-MAX_RANK = 5
+MAX_RANK = 3
 
 j = json.loads(open('static/movie0.json').read())
 
@@ -12,7 +12,7 @@ dates = defaultdict(int)
 movie_title = {}
 
 for i in j:
-    if i['date'] < '20130101':
+    if i['date'] < '20140101':
         continue
     if i['rank'] > MAX_RANK:
         continue
@@ -38,7 +38,7 @@ new_movie_title = {}
 movies_key = [i[0] for i in sorted(movies.iteritems(), key=lambda (k,v): v,reverse=True)]
 
 for i in j:
-    if i['date'] < '20130101':
+    if i['date'] < '20140101':
         continue
     url = i['url']
     code = int(url[url.index('code=')+5:])
