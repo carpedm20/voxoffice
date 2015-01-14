@@ -27,28 +27,26 @@ end  : 2015-??-??
   <![endif]-->
 
   <link rel="stylesheet" href="http://cdn.smtcs.rocks/md/md.css">
-  <link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/jquery.fullpage/2.5.0/jquery.fullPage.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
-  <body>
-    <nav class="teal">
-      <div class="container">
-        <div class="nav-wrapper">
-          <div class="col s12">
-            <a href="#!" class="brand-logo">carpedm20</a>
-            <ul class="side-nav">
-              <li><a href="./">FoxOffice</a></li>
-              <li><a href="./">Word2Vec</a></li>
-            </ul>
-          </div>
+  <body class="yir-generic">
+    <nav class="nav-bar">
+      <div class="nav-wrapper">
+        <div class="col s12">
+          <a href="#!" class="brand-logo">carpedm20</a>
+          <ul class="side-nav">
+            <li><a href="./">FoxOffice</a></li>
+            <li><a href="./">Word2Vec</a></li>
+          </ul>
         </div>
       </div>
     </nav>
 
-    <div class="section">
-      {% block content %}{% endblock %}
-    </div>
+    {% block content %}{% endblock %}
 
     <footer class="teal">
       <div class="container">
@@ -86,6 +84,7 @@ end  : 2015-??-??
       </div>
     </footer>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.fullpage/2.5.0/jquery.fullPage.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
     <script type="text/javascript" src="http://cdn.smtcs.rocks/md/md.js"></script>

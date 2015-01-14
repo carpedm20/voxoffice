@@ -3,15 +3,23 @@
 {% block head %}
 {% endblock %}
 {% block content %}
-<div class="container">
-  <br><br>
-  <h1 class="header center orange-text">Starter Template</h1>
-  <div class="row center">
-    <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
+<div id="fullpage">
+  <div class="section active"> 
+    <h1 class="header center orange-text logo-text">FoxOffice</h1>
+    <div class="row center text">
+      <p class="col s12 light">A Streamgraph Data Visualization of Korean Box Office Rankingi.<br/>For Intuition, Insight, Imagination and Creativity</p>
+    </div>
+    <div class="row center">
+      <p class="footnote">Streamgraph algorithm, colors, and data generation inspired by <a href="http://www.leebyron.com/else/streamgraph/">this paper</a></p>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div id="foxoffice"></div>
+  {% for year in years %}
+  <div class="section">
+    <h2 class="header center orange-text">{{year}}</h2>
+    <br/>
+    <div id="fox-{{year}}" class="foxoffice"></div>
+  </div>
+  {% endfor %}
 </div>
 
 {% endblock %}

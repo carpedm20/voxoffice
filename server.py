@@ -2,6 +2,9 @@ from flask import Flask
 from flask import url_for, redirect, render_template
 app = Flask(__name__, static_url_path="/carpedm20/fox/static",)
 
+import re
+from glob import glob
+
 PREFIX = "carpedm20/"
 STATIC = "%sstatic" % PREFIX
 
@@ -14,7 +17,11 @@ def root():
 def index():
     global PREFIX, STATIC
 
-    return render_template('index.html')
+    years = glob("./static/fox-*.json")
+    years = [re.findall(r'\d+',year)[0] for year in years]
+    years.sort(reverse=True)
+
+    return render_template('index.html', years = years)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
