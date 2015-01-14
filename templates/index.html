@@ -1,18 +1,25 @@
 {% extends "layout.html" %}
-{% block title %}Index{% endblock %}
-{% block head %}
+
+{% block sticker%}
+<div class="container" style="width:90%;">
+
+  <label>Graph style</label>
+  <form id="graph-style" action="#">
+    <p>
+      <input name="group1" type="radio" id="test1" checked/>
+      <label for="test1">Streamgraph</label>
+    </p>
+    <p>
+      <input name="group1" type="radio" id="test2" />
+      <label for="test2">Zero based graph</label>
+    </p>
+  </form>
+
+</div>
 {% endblock %}
+
 {% block content %}
 <div id="fullpage">
-  <div class="section active"> 
-    <h1 class="header center orange-text logo-text">FoxOffice</h1>
-    <div class="row center text">
-      <p class="col s12 light">A Streamgraph Data Visualization of Korean Box Office Rankingi.<br/>For Intuition, Insight, Imagination and Creativity</p>
-    </div>
-    <div class="row center">
-      <p class="footnote">Streamgraph algorithm, colors, and data generation inspired by <a href="http://www.leebyron.com/else/streamgraph/">this paper</a></p>
-    </div>
-  </div>
   {% for year in years %}
   <div class="section">
     <h2 class="header center orange-text">{{year}}</h2>
@@ -21,5 +28,4 @@
   </div>
   {% endfor %}
 </div>
-
 {% endblock %}

@@ -3,7 +3,7 @@ import numpy as np
 from collections import defaultdict
 
 MAX_RANK = 10
-SKIP_DATE = 4
+SKIP_DATE = 6
 
 j = json.loads(open('static/movie0.json').read())
 

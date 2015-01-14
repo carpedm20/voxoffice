@@ -1,4 +1,5 @@
 body {
+  min-width: 970px;
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -91,4 +92,8 @@ ul.side-nav li a {
 
 .footnote a {
   color: #def;
+}
+
+label {
+  font-size: 1.0rem;
 }

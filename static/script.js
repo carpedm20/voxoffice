@@ -1,23 +1,74 @@
+current_section = 0;
+
 $(document).ready(function() {
     $('#fullpage').fullpage({
         autoScrolling: false,
+        onLeave: function(index, nextIndex, direction){
+            current_section = nextIndex-2;
+        }
     });
     $(".dropdown-button").dropdown();
+
+    $("#sticker").sticky({
+        topSpacing : 80,
+    });
+
+    $("#sticker").css('width', $("#base").width()+20);
+    $("#sticker").css('height', $(".section").height());
+
+    $('#graph-style input:radio').change( function(){
+        var type = $(this).attr('id');
+        var chart = charts[current_section];
+
+        if (type == 'test1') {
+            chart.wiggle_transition(all_wiggle);
+        } else if (type == 'test2') {
+            chart.zero_transition(all_zero);
+        }
+    });
 });
+
+function all_zero() {
+    for (var idx in charts) {
+        chart = charts[idx];
+        chart.zero_transition();
+    }
+}
+
+function all_wiggle() {
+    for (var idx in charts) {
+        chart = charts[idx];
+        chart.wiggle_transition();
+    }
+}
 
 var format = d3.time.format("%Y%m%d");
 var format2 = d3.time.format("%b");
 
 var charts = [];
 
+zero_stack = d3.layout.stack()
+    .offset("zero")
+    //.offset("silhouette")
+    .values(function(d) { return d.values; })
+    .x(function(d) { return d.x; })
+    .y(function(d) { return d.y; });
+
+wiggle_stack = d3.layout.stack()
+    .offset("wiggle")
+    //.offset("silhouette")
+    .values(function(d) { return d.values; })
+    .x(function(d) { return d.x; })
+    .y(function(d) { return d.y; });
+
 var Chart = function(year) {
     var year = year;
 
-    var margin = {top: 10, right: 10, bottom: 100, left: 40},
-        margin2 = {top: 430, right: 10, bottom: 20, left: 40},
-        width = $(".foxoffice").parent().width() - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom,
-        height2 = 500 - margin2.top - margin2.bottom;
+    var margin = {top: 10, right: 10, bottom: 100, left: 20},
+        margin2 = {top: 530, right: 10, bottom: 20, left: 20},
+        width = $(".foxoffice").parent().width() - margin.left - margin.right - 2,
+        height = 600 - margin.top - margin.bottom,
+        height2 = 600 - margin2.top - margin2.bottom;
 
     var svg = d3.select("#"+year).append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -49,13 +100,6 @@ var Chart = function(year) {
     var context_color = "#FC8D59";
     var context_idx = 0;
 
-    var stack = d3.layout.stack()
-        .offset("wiggle")
-        //.offset("silhouette")
-        .values(function(d) { return d.values; })
-        .x(function(d) { return d.x; })
-        .y(function(d) { return d.y; });
-
     var area = d3.svg.area()
         //.interpolate("basis")
         .x(function(d) { return x(d.x); })
@@ -80,6 +124,41 @@ var Chart = function(year) {
     };
 
     var layers = [];
+    var layers0 = [];
+
+    this.zero_transition = function(callback) {
+        focus.selectAll(".layer")
+            .data(function() {
+                return zero_stack(layers);
+            })
+            .transition()
+            .duration(2500)
+            .attr("d", function(d) { return area(d.values); })
+            .each("end", callback);
+    }
+
+    this.wiggle_transition = function(callback) {
+        focus.selectAll(".layer")
+            .data(function() {
+                return wiggle_stack(layers);
+            })
+            .transition()
+            .duration(2500)
+            .attr("d", function(d) { return area(d.values); })
+            .each("end", callback);
+    }
+
+    this.transition = function() {
+        focus.selectAll(".layer")
+            .data(function() {
+                d = layers0;
+                layers0 = layers;
+                return layers = d;
+            })
+            .transition()
+            .duration(2500)
+            .attr("d", function(d) { return area(d.values); });
+    }
 
     var update_context = function(idx) {
         path = context.select("path");
@@ -133,16 +212,19 @@ var Chart = function(year) {
                 if (typeof layers[idx] == 'undefined') {
                     layers[idx] = {key : data['movies'][idx],
                                     idx : idx,values:[]};
+                    layers0[idx] = {key : data['movies'][idx],
+                                    idx : idx,values:[]};
                 }
                 tmp = y1[idx][jdx];
                 tmp = 1.0/tmp == Infinity ? 0 : 1.0/tmp;
                 layers[idx].values.push({key:data['movies'][idx],
                                         x: Number(jdx),
                                         y: tmp});
+                layers0[idx].values.push({key:data['movies'][idx],
+                                        x: Number(jdx),
+                                        y: 0});
             }
         }
-
-        layers = stack(layers);
 
         var n = layers.length,
             m = ((maxdate-mindate)/(1000*60*60*24)/skipdate);
@@ -154,7 +236,7 @@ var Chart = function(year) {
         color.domain([0, layers.length]);
 
         focus.selectAll(".layer")
-            .data(layers)
+            .data(wiggle_stack(layers))
             .enter().append("path")
             .attr("class", "layer")
             .attr("d", function(d) { return area(d.values); })

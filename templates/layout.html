@@ -46,7 +46,28 @@ end  : 2015-??-??
       </div>
     </nav>
 
-    {% block content %}{% endblock %}
+    <div class="row">
+      <div class="section">
+        <h1 class="header center orange-text logo-text">FoxOffice</h1>
+        <div class="row center text">
+          <p class="col s12 light">A Streamgraph Data Visualization of Korean Box Office Rankingi.<br/>For Intuition, Insight, Imagination and Creativity</p>
+        </div>
+        <div class="row center">
+          <p class="footnote">Streamgraph algorithm, colors, and data generation inspired by <a href="http://www.leebyron.com/else/streamgraph/">this paper</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div id="base" class="col s2">
+        <div id="sticker">
+        {% block sticker %}{% endblock %}
+        </div>
+      </div>
+      <div class="col s10">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
 
     <footer class="teal">
       <div class="container">
@@ -84,6 +105,7 @@ end  : 2015-??-??
       </div>
     </footer>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="http://stickyjs.com/jquery.sticky.js"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.fullpage/2.5.0/jquery.fullPage.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.js"></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
