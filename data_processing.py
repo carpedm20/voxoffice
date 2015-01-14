@@ -2,6 +2,8 @@ import json
 import numpy as np
 from collections import defaultdict
 
+MAX_RANK = 5
+
 j = json.loads(open('static/movie0.json').read())
 
 movies = defaultdict(int)
@@ -10,9 +12,9 @@ dates = defaultdict(int)
 movie_title = {}
 
 for i in j:
-    if i['date'] > '20060101':
-        break
-    if i['rank'] > 10:
+    if i['date'] < '20130101':
+        continue
+    if i['rank'] > MAX_RANK:
         continue
     url = i['url']
     code = int(url[url.index('code=')+5:])
@@ -29,33 +31,29 @@ dates.sort()
 print "Distinct movies : %s" % len(movies_key)
 print "Distinct dates : %s" % len(dates)
 
-y0 = np.zeros((len(movies_key),len(dates)), dtype='int32')
-y1 = np.zeros((len(movies_key),len(dates)), dtype='int32')
+y1 = np.zeros((len(movies_key),len(dates)), dtype='int16')
 
 new_movie_title = {}
 
+movies_key = [i[0] for i in sorted(movies.iteritems(), key=lambda (k,v): v,reverse=True)]
+
 for i in j:
-    if i['date'] > '20060101':
-        break
-    if i['rank'] > 10:
+    if i['date'] < '20130101':
         continue
     url = i['url']
     code = int(url[url.index('code=')+5:])
-    new_code = movies_key.index(code)
+    try:
+        new_code = movies_key.index(code)
+    except:
+        continue
     date = dates.index(i['date'])
-
     new_movie_title[new_code] = movie_title[code]
-
     y1[new_code][date] = int(i['rank'])
 
-y0[1] = y1[0]
-for idx, row in enumerate(y1[1:-1]):
-    y0[idx+2] = y0[idx+1] + row
 
 ans = {'movies' : new_movie_title,
        'mindate' : dates[0],
        'maxdate' : dates[-1],
-       'y0' : y0.tolist(),
        'y1' : y1.tolist() }
 
 with open('new.json','w') as f:
