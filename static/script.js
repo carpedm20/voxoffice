@@ -17,14 +17,8 @@ $(document).ready(function() {
             idx = chart.get_idx();
             $("#title").text(chart.get_layer()[idx].title);
             $("#naver-link").attr('href', "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+chart.get_layer()[idx].code);
-            $("#poster").attr('src', 'http://movie.naver.com/movie/bi/mi/photoViewPopup.nhn?movieCode='+chart.get_layer()[idx].code);
+            $("#poster").attr('src', chart.get_layer()[idx].url);
         }
-    });
-
-    $('#posimgter').on('load', function () {
-        $(this).error(function () {
-            $(this).unbind("error").attr("src", "https://avatars3.githubusercontent.com/u/3346407?v=3&s=460");
-        });
     });
 
     $(".dropdown-button").dropdown();
@@ -230,7 +224,9 @@ var Chart = function(year) {
         for (var idx in y1) {
             for (var jdx in y1[idx]) {
                 if (typeof layers[idx] == 'undefined') {
-                    layers[idx] = {title : data['movies'][idx][1],
+                    a =  data['movies'][idx][1];
+                    layers[idx] = {title : data['movies'][idx][2],
+                                   url : data['movies'][idx][1][0],
                                    code : data['movies'][idx][0],
                                    idx : idx,values:[]};
                     layers0[idx] = {title : data['movies'][idx][1],
@@ -313,7 +309,7 @@ var Chart = function(year) {
     var chage_poster = function() {
         $("#title").text(layers[context_idx].title);
         $("#naver-link").attr('href', "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+layers[context_idx].code);
-        $("#poster").attr('src', 'http://movie.naver.com/movie/bi/mi/photoViewPopup.nhn?movieCode='+layers[context_idx].code);
+        $("#poster").attr('src', layers[context_idx].url);
     }
 };
 
