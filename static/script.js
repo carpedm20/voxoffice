@@ -1,16 +1,36 @@
 current_section = 0;
+global_type = 'wiggle';
 
 $(document).ready(function() {
     $('#fullpage').fullpage({
         autoScrolling: false,
         onLeave: function(index, nextIndex, direction){
             current_section = nextIndex-2;
+
+            var chart = charts[current_section];
+            if (global_type == 'zero' && chart.type == 'wiggle') {
+                chart.zero_transition();
+            } else if (global_type == 'wiggle' && chart.type == 'zero') {
+                chart.wiggle_transition();
+            }
+
+            idx = chart.get_idx();
+            $("#title").text(chart.get_layer()[idx].title);
+            $("#naver-link").attr('href', "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+chart.get_layer()[idx].code);
+            $("#poster").attr('src', 'http://movie.naver.com/movie/bi/mi/photoViewPopup.nhn?movieCode='+chart.get_layer()[idx].code);
         }
     });
+
+    $('#posimgter').on('load', function () {
+        $(this).error(function () {
+            $(this).unbind("error").attr("src", "https://avatars3.githubusercontent.com/u/3346407?v=3&s=460");
+        });
+    });
+
     $(".dropdown-button").dropdown();
 
     $("#sticker").sticky({
-        topSpacing : 80,
+        topSpacing : 100,
     });
 
     $("#sticker").css('width', $("#base").width()+20);
@@ -21,26 +41,14 @@ $(document).ready(function() {
         var chart = charts[current_section];
 
         if (type == 'test1') {
-            chart.wiggle_transition(all_wiggle);
+            chart.wiggle_transition();
+            global_type = 'wiggle';
         } else if (type == 'test2') {
-            chart.zero_transition(all_zero);
+            chart.zero_transition();
+            global_type = 'zero';
         }
     });
 });
-
-function all_zero() {
-    for (var idx in charts) {
-        chart = charts[idx];
-        chart.zero_transition();
-    }
-}
-
-function all_wiggle() {
-    for (var idx in charts) {
-        chart = charts[idx];
-        chart.wiggle_transition();
-    }
-}
 
 var format = d3.time.format("%Y%m%d");
 var format2 = d3.time.format("%b");
@@ -100,6 +108,10 @@ var Chart = function(year) {
     var context_color = "#FC8D59";
     var context_idx = 0;
 
+    this.get_idx = function() {
+        return context_idx;
+    }
+
     var area = d3.svg.area()
         //.interpolate("basis")
         .x(function(d) { return x(d.x); })
@@ -126,26 +138,32 @@ var Chart = function(year) {
     var layers = [];
     var layers0 = [];
 
-    this.zero_transition = function(callback) {
+    this.get_layer = function() {
+        return layers;
+    }
+
+    this.type = 'wiggle';
+
+    this.zero_transition = function() {
+        this.type = 'zero';
         focus.selectAll(".layer")
             .data(function() {
                 return zero_stack(layers);
             })
             .transition()
             .duration(2500)
-            .attr("d", function(d) { return area(d.values); })
-            .each("end", callback);
+            .attr("d", function(d) { return area(d.values); });
     }
 
-    this.wiggle_transition = function(callback) {
+    this.wiggle_transition = function() {
+        this.type = 'wiggle';
         focus.selectAll(".layer")
             .data(function() {
                 return wiggle_stack(layers);
             })
             .transition()
             .duration(2500)
-            .attr("d", function(d) { return area(d.values); })
-            .each("end", callback);
+            .attr("d", function(d) { return area(d.values); });
     }
 
     this.transition = function() {
@@ -161,6 +179,8 @@ var Chart = function(year) {
     }
 
     var update_context = function(idx) {
+        context_idx = idx;
+
         path = context.select("path");
 
         y2.domain([0, d3.max(layers[context_idx].values, function(value) {
@@ -197,30 +217,32 @@ var Chart = function(year) {
 
         xAxis.tickFormat(function(d) {
             date = new Date(mindate);
-            date.setDate(mindate.getDate() + d*2);
+            date.setDate(mindate.getDate() + d*skipdate);
             return format2(date);
         });
 
         xAxis2.tickFormat(function(d) {
             date = new Date(mindate);
-            date.setDate(mindate.getDate() + d*2);
+            date.setDate(mindate.getDate() + d*skipdate);
             return format2(date);
         });
 
         for (var idx in y1) {
             for (var jdx in y1[idx]) {
                 if (typeof layers[idx] == 'undefined') {
-                    layers[idx] = {key : data['movies'][idx],
-                                    idx : idx,values:[]};
-                    layers0[idx] = {key : data['movies'][idx],
+                    layers[idx] = {title : data['movies'][idx][1],
+                                   code : data['movies'][idx][0],
+                                   idx : idx,values:[]};
+                    layers0[idx] = {title : data['movies'][idx][1],
+                                    code : data['movies'][idx][0],
                                     idx : idx,values:[]};
                 }
                 tmp = y1[idx][jdx];
                 tmp = 1.0/tmp == Infinity ? 0 : 1.0/tmp;
-                layers[idx].values.push({key:data['movies'][idx],
+                layers[idx].values.push({title:data['movies'][idx][1],
                                         x: Number(jdx),
                                         y: tmp});
-                layers0[idx].values.push({key:data['movies'][idx],
+                layers0[idx].values.push({title:data['movies'][idx][1],
                                         x: Number(jdx),
                                         y: 0});
             }
@@ -231,7 +253,7 @@ var Chart = function(year) {
 
         x.domain([0, m - 1]);
         x2.domain([0, m - 1]);
-        y.domain([0,5.5]);
+        y.domain([0,6.5]);
 
         color.domain([0, layers.length]);
 
@@ -247,7 +269,7 @@ var Chart = function(year) {
                     return color(d.idx);
             })
             .append("title")
-            .text(function (d,i) { return d.key; });
+            .text(function (d,i) { return d.title; });
 
         focus.append("g")
             .attr("class", "x axis")
@@ -265,17 +287,18 @@ var Chart = function(year) {
 
         svg.selectAll(".layer")
             .attr("opacity", 1)
-            .on("mouseover", function(d, i) {
+            /*.on("mouseover", function(d, i) {
                 svg.selectAll(".layer").transition()
                     .duration(250)
                     .attr("opacity", function(d, j) {
                         return j != i ? 0.6 : 1;
                     })
-            })
+            })*/
             .on("click", function(d, i) {
                 update_context(d.idx);
+                chage_poster();
             })
-            .on("mouseout", function(d, i) {
+            /*.on("mouseout", function(d, i) {
                 svg.selectAll(".layer")
                     .transition()
                     .duration(250)
@@ -283,8 +306,15 @@ var Chart = function(year) {
                 d3.select(this)
                     .classed("hover", false)
                     .attr("stroke-width", "0px");
-            });
+            });*/
+        chage_poster();
     };
+
+    var chage_poster = function() {
+        $("#title").text(layers[context_idx].title);
+        $("#naver-link").attr('href', "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+layers[context_idx].code);
+        $("#poster").attr('src', 'http://movie.naver.com/movie/bi/mi/photoViewPopup.nhn?movieCode='+layers[context_idx].code);
+    }
 };
 
 $(".foxoffice").each(function() {

@@ -97,3 +97,10 @@ ul.side-nav li a {
 label {
   font-size: 1.0rem;
 }
+
+.shadow {
+  background-color: #26a69a;
+  width: 25px;
+  height: 25px;
+  margin: 20px auto;
+}
