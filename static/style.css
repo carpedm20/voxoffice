@@ -29,8 +29,12 @@ ul.side-nav li a {
   shape-rendering: crispEdges;
 }
 
+.x.axis g text {
+  fill: white;
+}
+
 .x.axis line {
-  stroke: lightgrey;
+  stroke: white;
 }
 
 .x.axis .minor {
@@ -43,7 +47,7 @@ ul.side-nav li a {
 
 .y.axis line, .y.axis path {
   fill: none;
-  stroke: #000;
+  stroke: white;
 }
 
 .brush .extent {
