@@ -27,31 +27,67 @@ end  : 2015-??-??
   <![endif]-->
 
   <link rel="stylesheet" href="http://cdn.smtcs.rocks/md/md.css">
+  <link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
+
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <nav>
-      <div class="nav-wrapper">
-        <div class="col s12">
-          <a href="#!" class="brand-logo">FoxOffice</a>
-          <ul class="side-nav">
-            <li><a href="sass.html"><i class="mdi-action-search"></i></a></li>
-            <li><a href="components.html"><i class="mdi-action-view-module"></i></a></li>
-            <li><a href="javascript.html"><i class="mdi-navigation-refresh"></i></a></li>
-            <li><a href="mobile.html"><i class="mdi-navigation-more-vert"></i></a></li>
-          </ul>
+    <nav class="teal">
+      <div class="container">
+        <div class="nav-wrapper">
+          <div class="col s12">
+            <a href="#!" class="brand-logo">carpedm20</a>
+            <ul class="side-nav">
+              <li><a href="./">FoxOffice</a></li>
+              <li><a href="./">Word2Vec</a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </nav>
 
-    <div id="content">{% block content %}{% endblock %}</div>
-
-    <div id="footer">
-      {% block footer %}
-      &copy; Copyright 2010 by <a href="http://domain.invalid/">you</a>.
-      {% endblock %}
+    <div class="section">
+      {% block content %}{% endblock %}
     </div>
+
+    <footer class="teal">
+      <div class="container">
+        <div class="row">
+          <div class="col l6 s12">
+            <h5 class="white-text">Company Bio</h5>
+            <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
+
+
+          </div>
+          <div class="col l3 s12">
+            <h5 class="white-text">Settings</h5>
+            <ul>
+              <li><a class="white-text" href="#!">Link 1</a></li>
+              <li><a class="white-text" href="#!">Link 2</a></li>
+              <li><a class="white-text" href="#!">Link 3</a></li>
+              <li><a class="white-text" href="#!">Link 4</a></li>
+            </ul>
+          </div>
+          <div class="col l3 s12">
+            <h5 class="white-text">Connect</h5>
+            <ul>
+              <li><a class="white-text" href="#!">Link 1</a></li>
+              <li><a class="white-text" href="#!">Link 2</a></li>
+              <li><a class="white-text" href="#!">Link 3</a></li>
+              <li><a class="white-text" href="#!">Link 4</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+        Made by <a class="orange-text lighten-3" href="http://materializecss.com">Materialize</a>
+        </div>
+      </div>
+    </footer>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="http://cdn.smtcs.rocks/md/md.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+    <script type="text/javascript" src="http://cdn.smtcs.rocks/md/md.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
   </body>
 </html>

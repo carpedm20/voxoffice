@@ -11,10 +11,6 @@ var tooltip = d3.select("body")
     .style("top", "30px")
     .style("left", "55px");
 
-var svg = d3.select("#foxoffice").append("svg:svg")
-    .attr("width", width)
-    .attr("height", height);
-
 var data = [{"url": "/movie/bi/mi/basic.nhn?code=39470", "date": "20050208", "name": "\uc81c\ub2c8, \uc8fc\ub178", "rank": 1},
             {"url": "/movie/bi/mi/basic.nhn?code=39436", "date": "20050208", "name": "\ub9d0\uc544\ud1a4", "rank": 2},
             {"url": "/movie/bi/mi/basic.nhn?code=39510", "date": "20050208", "name": "B\ud615 \ub0a8\uc790\uce5c\uad6c", "rank": 3},
@@ -25,63 +21,88 @@ var data = [{"url": "/movie/bi/mi/basic.nhn?code=39470", "date": "20050208", "na
             {"url": "/movie/bi/mi/basic.nhn?code=38766", "date": "20050210", "name": "\uce5c\uc808\ud55c \uae08\uc790\uc528", "rank": 2}
 ];
 
-//var data = d3.json("./static/movie0.json", function(error, data) {
-    movie = data;
+var array;
 
-    var format = d3.time.format("%Y%m%d").parse;
+d3.json("./static/new.json", function(error, data) {
+    console.log("Start");
+    dates = data['dates'];
+    movies = data['movies'];
 
-    var mindate = format(data[0]['date']),
-        maxdate = format(data[data.length-1]['date']);
+    d = data['data'];
 
-    var x = d3.time.scale()
+    for (var idx in d)
+        for (var jdx in d[idx])
+            d[idx][jdx] = {x: Number(jdx), y: d[idx][jdx]};
+
+    array = d;
+    console.log("End");
+
+    var n = array.length,
+        m = array[0].length,
+        stack = d3.layout.stack().offset("wiggle"),
+        layers0 = array;
+
+    var width = 960,
+        height = 500;
+
+    var x = d3.scale.linear()
+        .domain([0, m - 1])
         .range([0, width]);
 
     var y = d3.scale.linear()
-        .range([height-10, 0]);
+        //.domain([0, d3.max(layer0, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); })])
+        .domain([0,10])
+        .range([height, 0]);
 
-    var colorrange = ["#045A8D", "#2B8CBE", "#74A9CF", "#A6BDDB", "#D0D1E6", "#F1EEF6"];
-    var z = d3.scale.ordinal()
-        .range(colorrange);
-
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .ticks(d3.time.weeks);
-
-    var yAxis = d3.svg.axis()
-        .scale(y);
+    var color = d3.scale.linear()
+        .range(["#aad", "#556"]);
 
     var area = d3.svg.area()
-        .y(function(d) { return x(d.x); })
-        .x0(function(d) { return y(null); })
-        .x1(function(d) { return y(d.y0 + d.y); });
+        .x(function(d) { return x(d.x); })
+        //.y0(function(d) { return y(d.y0); })
+        //.y1(function(d) { return y(d.y0 + d.y); });
+        .y(function(d) { return y(d.y); });
 
-    svg.append("g")
-        .attr("class", "yaxis")
-        .attr("transform", "translate("+padding+",0)")
-        .call(yAxis);
+    var svg = d3.select("#foxoffice").append("svg:svg")
+        .attr("width", width)
+        .attr("height", height);
 
-    svg.append("g")
-        .attr("class", "xaxis")
-        .attr("transform", "translate(0," + (height - padding) + ")")
-        .call(xAxis);
+    svg.selectAll("path")
+        .data(layers0)
+        .enter().append("path")
+        .attr("d", area)
+        .style("fill", function() { return color(Math.random()); });
 
-    data.forEach(function(d) {
-        d.date = format(d.date);
-        d.value = d.rank;
-    });
+});
 
-    var stack = d3.layout.stack()
-        .offset("silhouette")
-        .values(function(d) { return d.values; })
-        .x(function(d) { return d.date; })
-        .y(function(d) { return d.value; });
+function transition() {
+  d3.selectAll("path")
+      .data(function() {
+        var d = layers1;
+        layers1 = layers0;
+        return layers0 = d;
+      })
+    .transition()
+      .duration(2500)
+      .attr("d", area);
+}
 
-    var nest = d3.nest()
-        .key(function(d) { return d.key; });
+function bumpLayer(n) {
 
-    var layers = stack(nest.entries(data));
+  function bump(a) {
+    var x = 1 / (.1 + Math.random()),
+        y = 2 * Math.random() - .5,
+        z = 10 / (.1 + Math.random());
+    for (var i = 0; i < n; i++) {
+      var w = (i / n - y) * z;
+      a[i] += x * Math.exp(-w * w);
+    }
+  }
 
-    x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain([0, d3.max(data, function(d) { return d.y0 + d.y; })]);
+  var a = [], i;
+  for (i = 0; i < n; ++i) a[i] = 0;
+  for (i = 0; i < 5; ++i) bump(a);
+  return a.map(function(d, i) { return {x: i, y: Math.max(0, d)}; });
+}
 
 //});
