@@ -103,3 +103,27 @@ label {
   height: 25px;
   margin: 20px auto;
 }
+
+a.genre {
+  height: 32px;
+  font-size: 0.5rem;
+  padding-left: 12px;
+  padding-right: 12px;
+  margin-right: 2px;
+}
+
+.materialboxed  {
+  width: 100%;
+}
+
+div.about-me {
+  padding-left: 10px;
+}
+
+div.contact {
+  padding-left: 30px;
+}
+
+div.footer-copyright {
+  text-align: right;
+}

@@ -1,6 +1,16 @@
 current_section = 0;
 global_type = 'wiggle';
 
+window.onresize = function(event) {
+    $("#sticker").css('width', $("#base").width()+20);
+    $("#sticker").css('height', $(".section").height());
+
+    $("#sticker").sticky({
+        topSpacing : 100,
+        bottomSpacing: $("footer").height() + 15,
+    });
+};
+
 $(document).ready(function() {
     $('#fullpage').fullpage({
         autoScrolling: false,
@@ -25,6 +35,7 @@ $(document).ready(function() {
 
     $("#sticker").sticky({
         topSpacing : 100,
+        bottomSpacing: $("footer").height() + 15,
     });
 
     $("#sticker").css('width', $("#base").width()+20);
@@ -67,10 +78,10 @@ var Chart = function(year) {
     var year = year;
 
     var margin = {top: 10, right: 10, bottom: 100, left: 20},
-        margin2 = {top: 530, right: 10, bottom: 20, left: 20},
-        width = $(".foxoffice").parent().width() - margin.left - margin.right - 2,
-        height = 600 - margin.top - margin.bottom,
-        height2 = 600 - margin2.top - margin2.bottom;
+        margin2 = {top: 550, right: 10, bottom: 20, left: 20},
+        width = $(".foxoffice").parent().width() - margin.left - margin.right - 3,
+        height = 620 - margin.top - margin.bottom,
+        height2 = 620 - margin2.top - margin2.bottom;
 
     var svg = d3.select("#"+year).append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -140,9 +151,11 @@ var Chart = function(year) {
 
     this.zero_transition = function() {
         this.type = 'zero';
+        zer = zero_stack(layers);
+        y.domain([0, d3.max(zer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })+0.5]);
         focus.selectAll(".layer")
             .data(function() {
-                return zero_stack(layers);
+                return zer;
             })
             .transition()
             .duration(2500)
@@ -151,9 +164,11 @@ var Chart = function(year) {
 
     this.wiggle_transition = function() {
         this.type = 'wiggle';
+        wig = wiggle_stack(layers);
+        y.domain([0, d3.max(wig, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })]);
         focus.selectAll(".layer")
             .data(function() {
-                return wiggle_stack(layers);
+                return wig;
             })
             .transition()
             .duration(2500)
@@ -249,7 +264,7 @@ var Chart = function(year) {
 
         x.domain([0, m - 1]);
         x2.domain([0, m - 1]);
-        y.domain([0,6.5]);
+        y.domain([0, d3.max(wiggle_stack(layers), function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })]);
 
         color.domain([0, layers.length]);
 

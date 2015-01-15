@@ -7,32 +7,37 @@
   <form id="graph-style" action="#">
     <p>
       <input name="group1" type="radio" id="test1" checked/>
-      <label for="test1">Wiggle</label>
-    </p>
-    <p>
+      <label for="test1">Wiggle</label>&nbsp;&nbsp;
       <input name="group1" type="radio" id="test2" />
-      <label for="test2">Zero basline</label>
+      <label for="test2">Zero</label>
     </p>
   </form>
   <br/>
   <label>Movie information</label>
-    <div class="row">
-        <div class="col s12">
-          <div class="card">
-            <div class="card-image">
-              <img id="poster" src="https://avatars3.githubusercontent.com/u/3346407?v=3&s=460">
-            </div>
-            <div class="card-content">
-              <span id="title">Card Title</span>
-            </div>
-            <div class="card-action">
-              <a id="naver-link" href="#" target="_blank">Movie info</a>
-            </div>
-          </div>
+  <div class="row">
+    <div class="col s12">
+      <div class="card">
+        <div class="card-image">
+          <img id="poster" src="https://avatars3.githubusercontent.com/u/3346407?v=3&s=460">
+        </div>
+        <div class="card-content">
+          <a id="naver-link" href="#" target="_blank">
+            <span id="title">Card Title</span>
+          </a>
         </div>
       </div>
-  </form>
-  <br/>
+    </div>
+  </div>
+  <div class="row">
+    <label>Genre</label>
+    <br/>
+    <br/>
+    <a class="waves-effect waves-light genre btn">All</a>
+    <a class="waves-effect waves-light genre btn">Romance</a>
+    <a class="waves-effect waves-light genre btn">Action</a>
+    <a class="waves-effect waves-light genre btn">Thriller</a>
+    <a class="waves-effect waves-light genre btn">Comedy</a>
+  </div>
   <label>Graph theme</label>
   <div class="row">
     <div class="col m3">
@@ -64,7 +69,6 @@
   {% for year in years %}
   <div class="section">
     <h2 class="header center orange-text">{{year}}</h2>
-    <br/>
     <div id="fox-{{year}}" class="foxoffice"></div>
   </div>
   {% endfor %}
