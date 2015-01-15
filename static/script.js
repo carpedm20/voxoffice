@@ -12,7 +12,7 @@ window.onresize = function(event) {
 };
 
 $(document).ready(function() {
-    $('#fullpage').fullpage({
+    $("#fullpage").fullpage({
         autoScrolling: false,
         onLeave: function(index, nextIndex, direction){
             current_section = Math.floor(nextIndex/2)-1;
@@ -27,12 +27,34 @@ $(document).ready(function() {
 
             idx = chart.get_idx();
             $("#title").text(chart.get_layer()[idx].title);
-            $("#naver-link").attr('href', "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+chart.get_layer()[idx].code);
+            $("#naver-link").attr("href", "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+chart.get_layer()[idx].code);
             $("#poster").attr('src', chart.get_layer()[idx].url);
         }
     });
 
     $(".dropdown-button").dropdown();
+
+    $("a.theme").click(function() {
+        color = $(this).attr('id');
+
+        if (color == "cyan") {
+            color1 = "#006064",
+            color2 = "#e0f7fa";
+        } else if (color == "default") {
+            color1 = "#045A8D",
+            color2 = "#F1EEF6";
+        } else if (color == "bg") {
+            color1 = "#263238",
+            color2 = "#eceff1";
+        } else if (color == "teal") {
+            color1 = "#004d40",
+            color2 = "#e0f2f1";
+        }
+        for (var idx in charts) {
+            chart = charts[idx];
+            chart.update_color(color1, color2);
+        }
+    });
 
     $("#sticker").sticky({
         topSpacing : 100,
@@ -210,6 +232,21 @@ var Chart = function(year) {
             .attr("d", function(d) { return area(d.values); });
     }
 
+    this.update_color = function(color1, color2) {
+        color = d3.scale.linear()
+            .range([color1, color2]);
+
+        color.domain([0, layers.length]);
+
+        focus.selectAll("path")
+            .style("fill", function(d) {
+                if (d.idx == context_idx)
+                    return context_color;
+                else
+                    return color(d.idx);
+            });
+    };
+
     var update_context = function(idx) {
         context_idx = idx;
 
@@ -325,7 +362,7 @@ var Chart = function(year) {
                 change_poster_specific(d.title, d.code, d.url);
                 svg.selectAll(".layer")
                     .attr("opacity", function(d, j) {
-                        return j != i ? 0.6 : 1;
+                        return j != i ? 0.8 : 1;
                     })
 
                 mousex = d3.mouse(this);
