@@ -34,6 +34,14 @@ end  : 2015-??-??
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body class="yir-generic">
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=776839839027483&version=v2.0";
+            fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>
     <nav class="nav-bar">
       <div class="nav-wrapper">
         <div class="col s12">
@@ -50,7 +58,7 @@ end  : 2015-??-??
       <div class="section">
         <h1 class="header center orange-text logo-text">FoxOffice</h1>
         <div class="row center text">
-          <p class="col s12 light">A Streamgraph Data Visualization of Korean Box Office Ranking.<br/>For Intuition, Insight, Imagination and Creativity</p>
+          <p class="col s12 light">A Data Visualization of Box Office History.<br/>"What was the famous movie in 2007?"</p>
         </div>
         <div class="row center">
           <p class="footnote">Streamgraph algorithm, colors, and data generation inspired by <a href="http://www.leebyron.com/else/streamgraph/">this paper</a></p>
@@ -60,58 +68,34 @@ end  : 2015-??-??
 
     <div class="row">
       <div class="section">
-        <h2 class="header center orange-text">How to READ?</h2>
+        <h2 class="header center orange-text">How to read?</h2>
         <br/>
         <div class="container">
           <div class="col s6">
-            <div class="card blue-grey darken-1">
-              <div class="card-content white-text">
-                <span class="card-title">Card Title</span>
-                <p>I am a very simple card. I am good at containing small bits of information.
-                I am convenient because I require little markup to use effectively.</p>
-              </div>
-              <div class="card-action">
-                <a href="#">This is a link</a>
-                <a href='#'>This is a link</a>
+            <div class="card info-card blue-grey darken-1">
+              <div class="card-content white-text center">
+                <span class="card-title">The bigger, the better (Daily)</span>
+                <div class="row center">
+                  <img src="{{ url_for('static', filename='weight.png') }}" style="width: 80%;">
+                </div>
               </div>
             </div>
           </div>
           <div class="col s6">
-            <div class="card blue-grey darken-1">
-              <div class="card-content white-text">
-                <span class="card-title">Card Title</span>
-                <p>I am a very simple card. I am good at containing small bits of information.
-                I am convenient because I require little markup to use effectively.</p>
-              </div>
-              <div class="card-action">
-                <a href="#">This is a link</a>
-                <a href='#'>This is a link</a>
+            <div class="card info-card blue-grey darken-1">
+              <div class="card-content white-text center">
+                <span class="card-title">The darker, the better (Yearly)</span>
+                <div class="row"></div>
+                <div class="col s12">
+                  <img src="{{ url_for('static', filename='color.png') }}" style="width:80%">
+                </div>
               </div>
             </div>
           </div>
-          <div class="col s6">
-            <div class="card blue-grey darken-1">
-              <div class="card-content white-text">
-                <span class="card-title">Card Title</span>
-                <p>I am a very simple card. I am good at containing small bits of information.
-                I am convenient because I require little markup to use effectively.</p>
-              </div>
-              <div class="card-action">
-                <a href="#">This is a link</a>
-                <a href='#'>This is a link</a>
-              </div>
-            </div>
-          </div>
-          <div class="col s6">
-            <div class="card blue-grey darken-1">
-              <div class="card-content white-text">
-                <span class="card-title">Card Title</span>
-                <p>I am a very simple card. I am good at containing small bits of information.
-                I am convenient because I require little markup to use effectively.</p>
-              </div>
-              <div class="card-action">
-                <a href="#">This is a link</a>
-                <a href='#'>This is a link</a>
+          <div class="col s12">
+            <div class="card">
+              <div class="card-image">
+                <img src="{{ url_for('static', filename='insight.png') }}">
               </div>
             </div>
           </div>
@@ -137,7 +121,7 @@ end  : 2015-??-??
             <h5 class="white-text">About me</h5>
             <div class="row">
               <div class="col s3">
-                <img class="materialboxed" src="http://pail.unist.ac.kr:8080/static/img/TaehoonKim.jpg"></a>
+                <img class="z-depth-3" src="http://pail.unist.ac.kr:8080/static/img/TaehoonKim.jpg"></a>
               </div>
               <div class="col s9">
                 <div class="about-me">

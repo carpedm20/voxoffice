@@ -7,7 +7,7 @@ window.onresize = function(event) {
 
     $("#sticker").sticky({
         topSpacing : 100,
-        bottomSpacing: $("footer").height() - 30,
+        bottomSpacing: $("footer").height() + 10,
     });
 };
 
@@ -35,7 +35,7 @@ $(document).ready(function() {
 
     $("#sticker").sticky({
         topSpacing : 100,
-        bottomSpacing: $("footer").height() - 30,
+        bottomSpacing: $("footer").height() + 10,
     });
 
     $("#sticker").css('width', $("#base").width()+20);
@@ -298,33 +298,37 @@ var Chart = function(year) {
 
         svg.selectAll(".layer")
             .attr("opacity", 1)
-            /*.on("mouseover", function(d, i) {
-                svg.selectAll(".layer").transition()
-                    .duration(250)
+            .on("mouseover", function(d, i) {
+                svg.selectAll(".layer")
                     .attr("opacity", function(d, j) {
                         return j != i ? 0.6 : 1;
                     })
-            })*/
+                change_poster_specific(d.title, d.code, d.url);
+            })
             .on("click", function(d, i) {
                 update_context(d.idx);
-                chage_poster();
+                change_poster();
             })
-            /*.on("mouseout", function(d, i) {
+            .on("mouseout", function(d, i) {
                 svg.selectAll(".layer")
-                    .transition()
-                    .duration(250)
                     .attr("opacity", "1");
                 d3.select(this)
                     .classed("hover", false)
                     .attr("stroke-width", "0px");
-            });*/
-        chage_poster();
+            });
+        change_poster();
     };
 
-    var chage_poster = function() {
+    var change_poster = function() {
         $("#title").text(layers[context_idx].title);
         $("#naver-link").attr('href', "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+layers[context_idx].code);
         $("#poster").attr('src', layers[context_idx].url);
+    }
+
+    var change_poster_specific = function(title, code, url) {
+        $("#title").text(title);
+        $("#naver-link").attr('href', "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+code);
+        $("#poster").attr('src', url);
     }
 };
 

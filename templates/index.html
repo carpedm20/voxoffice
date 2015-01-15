@@ -3,16 +3,6 @@
 {% block sticker%}
 <div class="container" style="width:90%;">
 
-  <label>Graph style</label>
-  <form id="graph-style" action="#">
-    <p>
-      <input name="group1" type="radio" id="test1" checked/>
-      <label for="test1">Wiggle</label>&nbsp;&nbsp;
-      <input name="group1" type="radio" id="test2" />
-      <label for="test2">Zero</label>
-    </p>
-  </form>
-  <br/>
   <label>Movie information</label>
   <div class="row">
     <div class="col s12">
@@ -20,9 +10,9 @@
         <div class="card-image">
           <img id="poster" src="https://avatars3.githubusercontent.com/u/3346407?v=3&s=460">
         </div>
-        <div class="card-content">
+        <div class="card-content center">
           <a id="naver-link" href="#" target="_blank">
-            <span id="title">Card Title</span>
+            <span id="title">carpedm20</span>
           </a>
         </div>
       </div>
@@ -38,6 +28,16 @@
     <a class="waves-effect waves-light genre btn">Thriller</a>
     <a class="waves-effect waves-light genre btn">Comedy</a>
   </div>
+  <label>Graph style</label>
+  <form id="graph-style" action="#">
+    <p>
+      <input name="group1" type="radio" id="test1" checked/>
+      <label for="test1">Wiggle</label>&nbsp;&nbsp;
+      <input name="group1" type="radio" id="test2" />
+      <label for="test2">Zero</label>
+    </p>
+  </form>
+  <br/>
   <label>Graph theme</label>
   <div class="row">
     <div class="col m3">
@@ -60,6 +60,9 @@
         <p class="z-depth-3 shadow orange"></p>
       </a>
     </div>
+  </div>
+  <div class="row center">
+    <div class="fb-like" data-href="http://pail.unist.ac.kr/carpedm20/fox/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
   </div>
 </div>
 {% endblock %}
