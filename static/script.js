@@ -1,4 +1,4 @@
-current_section = 0;
+current_section = 3;
 global_type = 'wiggle';
 
 window.onresize = function(event) {
@@ -7,7 +7,7 @@ window.onresize = function(event) {
 
     $("#sticker").sticky({
         topSpacing : 100,
-        bottomSpacing: $("footer").height() + 15,
+        bottomSpacing: $("footer").height() - 30,
     });
 };
 
@@ -15,7 +15,7 @@ $(document).ready(function() {
     $('#fullpage').fullpage({
         autoScrolling: false,
         onLeave: function(index, nextIndex, direction){
-            current_section = nextIndex-2;
+            current_section = nextIndex-3;
 
             var chart = charts[current_section];
             if (global_type == 'zero' && chart.type == 'wiggle') {
@@ -35,7 +35,7 @@ $(document).ready(function() {
 
     $("#sticker").sticky({
         topSpacing : 100,
-        bottomSpacing: $("footer").height() + 15,
+        bottomSpacing: $("footer").height() - 30,
     });
 
     $("#sticker").css('width', $("#base").width()+20);
