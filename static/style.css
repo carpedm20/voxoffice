@@ -5,6 +5,10 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
+.foxoffice {
+  position: relative;
+}
+
 .grey li a {
   color: white;
 }
@@ -133,5 +137,85 @@ div.insight-container {
 }
 
 div.info-card {
-  min-height: 245px;
+  min-height: 215px;
+}
+
+.ubuntu {
+  font-family: Ubuntu,sans-serif;
+}
+
+.strip-overlay {
+  background: rgba(68,85,102,.4);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.year-poster {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 0px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.year-poster-img {
+  height:100%;
+}
+
+.year-poster-content {
+  width: 90%;
+  padding-top: 10%;
+  box-sizing: border-box;
+  height: 100%;
+  font-weight: 400;
+  position: relative;
+}
+
+.year-poster-text {
+  width: 60%;
+  float: right;
+  text-align: right;
+}
+
+.year-poster-text h2 a {
+  color: #fff;
+  font-weight: 400;
+  font-size: 95px;
+  line-height: 1em;
+}
+
+.year-poster-content h1 span {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1;
+  display: inline-block;
+  background-color: rgba(0,0,0,.3);
+  border: 1px solid rgba(255,255,255,.6);
+  color: #fff;
+  padding: 5px 8px 6px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  white-space: nowrap;
+  -webkit-box-shadow: 1px 1px 2px rgba(0,0,0,.25);
+  -moz-box-shadow: 1px 1px 2px rgba(0,0,0,.25);
+  box-shadow: 1px 1px 2px rgba(0,0,0,.25);
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
+.img-block-strip {
+  width: 100%;
+  height: 300px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
 }

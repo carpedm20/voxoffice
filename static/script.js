@@ -15,7 +15,8 @@ $(document).ready(function() {
     $('#fullpage').fullpage({
         autoScrolling: false,
         onLeave: function(index, nextIndex, direction){
-            current_section = nextIndex-3;
+            current_section = Math.floor(nextIndex/2)-1;
+            console.log(current_section)
 
             var chart = charts[current_section];
             if (global_type == 'zero' && chart.type == 'wiggle') {
@@ -42,6 +43,8 @@ $(document).ready(function() {
     $("#sticker").css('height', $(".section").height());
 
     $('#graph-style input:radio').change( function(){
+        console.log(current_section);
+
         var type = $(this).attr('id');
         var chart = charts[current_section];
 
@@ -131,6 +134,26 @@ var Chart = function(year) {
     var focus = svg.append("g")
         .attr("class", "focus")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var vertical_line = d3.select("#"+year).append("div")
+        .attr("class", "remove")
+        .style("position", "absolute")
+        .style("z-index", "19")
+        .style("width", "1px")
+        .style("height", height+"px")
+        .style("top", margin.top+"px")
+        .style("bottom", margin.bottom+"px")
+        .style("left", "0px")
+        .style("background", "rgba(255,255,255,0.5)")
+
+    var tooltip = d3.select("#"+year)
+        .append("div")
+        .attr("class", "remove")
+        .style("position", "absolute")
+        .style("z-index", "20")
+        .style("visibility", "hidden")
+        .style("top", "20px")
+        .style("left", "75px");
 
     var context = svg.append("g")
         .attr("class", "context")
@@ -299,11 +322,23 @@ var Chart = function(year) {
         svg.selectAll(".layer")
             .attr("opacity", 1)
             .on("mouseover", function(d, i) {
+                change_poster_specific(d.title, d.code, d.url);
                 svg.selectAll(".layer")
                     .attr("opacity", function(d, j) {
                         return j != i ? 0.6 : 1;
                     })
-                change_poster_specific(d.title, d.code, d.url);
+
+                mousex = d3.mouse(this);
+                mousex = mousex[0] + 15;
+                vertical_line.style("left", mousex + "px");
+            })
+            .on("mousemove", function(d, i){
+                mousex = d3.mouse(this);
+                mousex = mousex[0] + 15;
+                vertical_line.style("left", mousex + "px" );
+
+                html =  "<p>" + d.title + "<br>" + d.code + "</p>";
+                tooltip.html(html).style("visibility", "visible");
             })
             .on("click", function(d, i) {
                 update_context(d.idx);
@@ -315,6 +350,9 @@ var Chart = function(year) {
                 d3.select(this)
                     .classed("hover", false)
                     .attr("stroke-width", "0px");
+
+                html =  "<p>" + d.title + "<br>" + d.code + "</p>";
+                tooltip.html(html).style("visibility", "hidden");
             });
         change_poster();
     };
@@ -338,12 +376,4 @@ $(".foxoffice").each(function() {
     chart = new Chart(year);
     chart.get_json();
     charts.push(chart);
-
-
-    function type(d) {
-    d.date = parseDate(d.date);
-    d.price = +d.price;
-    return d;
-    }
-
 });
