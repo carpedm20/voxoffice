@@ -7,7 +7,7 @@ window.onresize = function(event) {
 
     $("#sticker").sticky({
         topSpacing : 100,
-        bottomSpacing: $("footer").height() + 10,
+        bottomSpacing: document.getElementById('footer').scrollHeight + 10,
     });
 };
 
@@ -34,6 +34,25 @@ $(document).ready(function() {
 
     $(".dropdown-button").dropdown();
 
+    $("a.genre").click(function() {
+        genre = $(this).attr('id');
+
+        $("a.genre").removeClass('teal');
+        $(this).addClass('teal');
+
+        charts = [];
+        $(".foxoffice").each(function() {
+            $(this).html('<div class="row center loading" width="1085" height="620"><div class="preloader-wrapper big active"> <div class="spinner-layer spinner-blue"> <div class="circle-clipper left"> <div class="circle"></div> </div><div class="gap-patch"> <div class="circle"></div> </div><div class="circle-clipper right"> <div class="circle"></div> </div> </div> </div>'); 
+        });
+
+        $(".foxoffice").each(function() {
+            year = $(this).attr('id');
+            chart = new Chart(year, genre);
+            chart.get_json();
+            charts.push(chart);
+        });
+    });
+
     $("a.theme").click(function() {
         color = $(this).attr('id');
 
@@ -58,7 +77,7 @@ $(document).ready(function() {
 
     $("#sticker").sticky({
         topSpacing : 100,
-        bottomSpacing: $("footer").height() + 10,
+        bottomSpacing: document.getElementById('footer').scrollHeight + 10,
     });
 
     $("#sticker").css('width', $("#base").width()+20);
@@ -99,7 +118,7 @@ wiggle_stack = d3.layout.stack()
     .x(function(d) { return d.x; })
     .y(function(d) { return d.y; });
 
-var Chart = function(year) {
+var Chart = function(year, genre) {
     var year = year;
 
     var margin = {top: 10, right: 10, bottom: 100, left: 20},
@@ -108,9 +127,7 @@ var Chart = function(year) {
         height = 620 - margin.top - margin.bottom,
         height2 = 620 - margin2.top - margin2.bottom;
 
-    var svg = d3.select("#"+year).append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom);
+    var svg, context, focus;
 
     var x = d3.scale.linear().range([0, width]),
         x2 = d3.scale.linear().range([0, width]),
@@ -153,10 +170,6 @@ var Chart = function(year) {
         .y0(height2)
         .y1(function(d) { return y2(d.y); });
 
-    var focus = svg.append("g")
-        .attr("class", "focus")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
     /*var vertical_line = d3.select("#"+year).append("div")
         .attr("class", "remove")
         .style("position", "absolute")
@@ -177,20 +190,17 @@ var Chart = function(year) {
         .style("top", "20px")
         .style("left", "75px");
 
-    var context = svg.append("g")
-        .attr("class", "context")
-        .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
-
-    this.genre = 'comedy';
+    this.genre = genre;
 
     this.get_json = function() {
-        alert(this.genre);
-        d3.json("./static/"+this.genre+"-"+year+".json", this.process);
+        year_number = year.match(/\d+/g)[0];
+        d3.json("./static/"+this.genre+"-"+year_number+".json", this.process);
     };
 
     this.change_genre = function(genre) {
         this.genre = genre;
-        d3.json("./static/"+this.genre+"-"+year+".json", this.process);
+        year_number = year.match(/\d+/g)[0];
+        d3.json("./static/"+this.genre+"-"+year_number+".json", this.process_update);
     };
 
     var layers = [];
@@ -286,7 +296,23 @@ var Chart = function(year) {
             });
     };
 
+    var clicked_idx = 0;
+
     this.process = function(error, data) {
+        d3.select("#"+year).html('');
+
+        svg = d3.select("#"+year).append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom);
+
+        context = svg.append("g")
+            .attr("class", "context")
+            .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+        focus = svg.append("g")
+            .attr("class", "focus")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
         mindate = format.parse(data['mindate']);
         maxdate = format.parse(data['maxdate']);
         skipdate = Number(data['skipdate']);
@@ -403,6 +429,8 @@ var Chart = function(year) {
                 tooltip.html(html).style("visibility", "visible");*/
             })
             .on("click", function(d, i) {
+                clicked_idx = d.idx;
+
                 update_context(d.idx);
                 change_poster();
             })
@@ -412,6 +440,9 @@ var Chart = function(year) {
                 d3.select(this)
                     .classed("hover", false)
                     .attr("stroke-width", "0px");
+
+                update_context(clicked_idx);
+                change_poster();
 
                 /*html =  "<p>" + d.title + "<br>" + d.code + "</p>";
                 tooltip.html(html).style("visibility", "hidden");*/
@@ -435,7 +466,7 @@ var Chart = function(year) {
 $(".foxoffice").each(function() {
     year = $(this).attr('id');
 
-    chart = new Chart(year);
+    chart = new Chart(year, 'all');
     chart.get_json();
     charts.push(chart);
 });
