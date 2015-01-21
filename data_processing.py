@@ -5,83 +5,86 @@ import requests
 from collections import defaultdict
 
 MAX_RANK = 10
-SKIP_DATE = 6
+SKIP_DATE = 7
 
-j = json.loads(open('static/movie0.json').read())
+for genre in ['action', 'comedy', 'thriller', 'romance', 'all']:
+    print " ******** %s ********* " % genre
 
-years = range(2007, 2015)
+    j = json.loads(open('static/movie-%s.json' % genre).read())
 
-poster_dict = {}
+    years = range(2007, 2015)
 
-def poster_url(code):
-    b = BeautifulSoup(requests.get('http://movie.naver.com/movie/bi/mi/photoViewPopup.nhn?movieCode='+str(code)).text)
-    try:
-        img = b.find('img')
-        return [img['src']+"?type=m203_290_2", img['alt']]
-    except:
-        return ['http://static.naver.net/movie/2012/06/dft_img203x290.png','']
+    poster_dict = {}
 
-for year in years:
-    print year
+    def poster_url(code):
+        b = BeautifulSoup(requests.get('http://movie.naver.com/movie/bi/mi/photoViewPopup.nhn?movieCode='+str(code)).text)
+        try:
+            img = b.find('img')
+            return [img['src']+"?type=m203_290_2", img['alt']]
+        except:
+            return ['http://static.naver.net/movie/2012/06/dft_img203x290.png','']
 
-    movies = defaultdict(int)
-    dates = defaultdict(int)
+    for year in years:
+        print year
 
-    movie_title = {}
+        movies = defaultdict(int)
+        dates = defaultdict(int)
 
-    start_year = '%s0101' % year
-    end_year  = '%s1231' % year
+        movie_title = {}
 
-    for i in j:
-        dd = int(i['date'][-2:])
-        if dd % SKIP_DATE == 0 or dd in [28,29,30,31]:
-            if start_year < i['date'] < end_year:
-                if i['rank'] > MAX_RANK:
-                    continue
-                url = i['url']
-                code = int(url[url.index('code=')+5:])
-                movies[code] += 1
-                movie_title[code] = i['name']
-                dates[i['date']] += 1
+        start_year = '%s0101' % year
+        end_year  = '%s1231' % year
 
-    movies_key = movies.keys()
-    movies_key.sort()
+        for i in j:
+            dd = int(i['date'][-2:])
+            if dd % SKIP_DATE == 0 or dd in [28,29,30,31]:
+                if start_year < i['date'] < end_year:
+                    if i['rank'] > MAX_RANK:
+                        continue
+                    url = i['url']
+                    code = int(url[url.index('code=')+5:])
+                    movies[code] += 1
+                    movie_title[code] = i['name']
+                    dates[i['date']] += 1
 
-    dates = dates.keys()
-    dates.sort()
+        movies_key = movies.keys()
+        movies_key.sort()
 
-    print "Distinct movies : %s" % len(movies_key)
-    print "Distinct dates : %s" % len(dates)
+        dates = dates.keys()
+        dates.sort()
 
-    y1 = np.zeros((len(movies_key),len(dates)), dtype='int16')
+        print "Distinct movies : %s" % len(movies_key)
+        print "Distinct dates : %s" % len(dates)
 
-    new_movie_title = {}
+        y1 = np.zeros((len(movies_key),len(dates)), dtype='int16')
 
-    movies_key = [i[0] for i in sorted(movies.iteritems(), key=lambda (k,v): v,reverse=True)]
+        new_movie_title = {}
 
-    for i in j:
-        dd = int(i['date'][-2:])
-        if dd % SKIP_DATE == 0 or dd in [28,29,30,31]:
-            if start_year < i['date'] < end_year:
-                url = i['url']
-                code = int(url[url.index('code=')+5:])
-                try:
-                    url = poster_dict[code]
-                except:
-                    url = poster_dict[code] = poster_url(code)
-                try:
-                    new_code = movies_key.index(code)
-                except:
-                    continue
-                date = dates.index(i['date'])
-                new_movie_title[new_code] = [code, url, movie_title[code]]
-                y1[new_code][date] = int(i['rank'])
+        movies_key = [i[0] for i in sorted(movies.iteritems(), key=lambda (k,v): v,reverse=True)]
 
-    ans = {'movies' : new_movie_title,
-        'mindate' : dates[0],
-        'maxdate' : dates[-1],
-        'skipdate' : SKIP_DATE,
-        'y1' : y1.tolist() }
+        for i in j:
+            dd = int(i['date'][-2:])
+            if dd % SKIP_DATE == 0 or dd in [28,29,30,31]:
+                if start_year < i['date'] < end_year:
+                    url = i['url']
+                    code = int(url[url.index('code=')+5:])
+                    try:
+                        url = poster_dict[code]
+                    except:
+                        url = poster_dict[code] = poster_url(code)
+                    try:
+                        new_code = movies_key.index(code)
+                    except:
+                        continue
+                    date = dates.index(i['date'])
+                    new_movie_title[new_code] = [code, url, movie_title[code]]
+                    y1[new_code][date] = int(i['rank'])
 
-    with open('fox-%s.json' % year,'w') as f:
-        json.dump(ans, f)
+        ans = {'movies' : new_movie_title,
+            'mindate' : dates[0],
+            'maxdate' : dates[-1],
+            'skipdate' : SKIP_DATE,
+            'y1' : y1.tolist() }
+
+        with open('%s-%s.json' % (genre, year),'w') as f:
+            json.dump(ans, f)

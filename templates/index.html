@@ -22,11 +22,11 @@
     <label>Genre</label>
     <br/>
     <br/>
-    <a class="waves-effect waves-light genre btn">All</a>
-    <a class="waves-effect waves-light genre btn">Romance</a>
-    <a class="waves-effect waves-light genre btn">Action</a>
-    <a class="waves-effect waves-light genre btn">Thriller</a>
-    <a class="waves-effect waves-light genre btn">Comedy</a>
+    <a id="all" class="waves-effect waves-light genre btn">All</a>
+    <a id="romance" class="waves-effect waves-light genre btn">Romance</a>
+    <a id="action" class="waves-effect waves-light genre btn">Action</a>
+    <a id="thriller" class="waves-effect waves-light genre btn">Thriller</a>
+    <a id="comedy" class="waves-effect waves-light genre btn">Comedy</a>
   </div>
   <div class="row">
     <form id="graph-style" action="#">
@@ -75,20 +75,9 @@
   {% for year in years %}
   <div class="section">
     <h2 class="header center orange-text ubuntu">{{year}}</h2>
-    <div id="fox-{{year}}" class="foxoffice"></div>
+    <div id="all-{{year}}" class="foxoffice"></div>
   </div>
-  <div class="section valign-demo valign-wrapper">
-    <div class="row year-poster" style="background-image:url(http://letterboxd-assets.s3.amazonaws.com/sm/upload/8a/l8/c1/q1/django-unchained-5.jpg);">
-    </div>
-    <div class="year-poster-content">
-      <div class="year-poster-text container">
-        <h1><span class="ubuntu">Most Popular Film</span></h1>
-        <h2 class="prettify ubuntu"><a href="/film/django-unchained/">Django Unchained</a></h2>
-      </div>
-    </div>
-    <div class="img-block-strip">
-      <div class="strip-overlay"></div>
-    </div>
+  <div class="section">
   </div>
   {% endfor %}
 </div>

@@ -157,7 +157,7 @@ var Chart = function(year) {
         .attr("class", "focus")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var vertical_line = d3.select("#"+year).append("div")
+    /*var vertical_line = d3.select("#"+year).append("div")
         .attr("class", "remove")
         .style("position", "absolute")
         .style("z-index", "19")
@@ -166,7 +166,7 @@ var Chart = function(year) {
         .style("top", margin.top+"px")
         .style("bottom", margin.bottom+"px")
         .style("left", "0px")
-        .style("background", "rgba(255,255,255,0.5)")
+        .style("background", "rgba(255,255,255,0.5)");*/
 
     var tooltip = d3.select("#"+year)
         .append("div")
@@ -181,8 +181,16 @@ var Chart = function(year) {
         .attr("class", "context")
         .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
+    this.genre = 'comedy';
+
     this.get_json = function() {
-        d3.json("./static/"+year+".json", this.process);
+        alert(this.genre);
+        d3.json("./static/"+this.genre+"-"+year+".json", this.process);
+    };
+
+    this.change_genre = function(genre) {
+        this.genre = genre;
+        d3.json("./static/"+this.genre+"-"+year+".json", this.process);
     };
 
     var layers = [];
@@ -360,22 +368,39 @@ var Chart = function(year) {
             .attr("opacity", 1)
             .on("mouseover", function(d, i) {
                 change_poster_specific(d.title, d.code, d.url);
-                svg.selectAll(".layer")
+                /*svg.selectAll(".layer")
                     .attr("opacity", function(d, j) {
                         return j != i ? 0.8 : 1;
                     })
 
                 mousex = d3.mouse(this);
                 mousex = mousex[0] + 15;
-                vertical_line.style("left", mousex + "px");
+                vertical_line.style("left", mousex + "px");*/
             })
             .on("mousemove", function(d, i){
-                mousex = d3.mouse(this);
+                /*mousex = d3.mouse(this);
                 mousex = mousex[0] + 15;
                 vertical_line.style("left", mousex + "px" );
 
-                html =  "<p>" + d.title + "<br>" + d.code + "</p>";
-                tooltip.html(html).style("visibility", "visible");
+                current_x = Math.floor(x.invert(d3.mouse(this)[0]));
+                var list = [];
+
+                for (var idx in layers) {
+                    layer = layers[idx];
+
+                    list.push(layer.values[current_x]);
+                }
+
+                var sorted = list.sort(function (a,b) { return (b.y > a.y); });
+
+                body = ''
+
+                for (var idx in [0,1,2,3,4]) {
+                    body += sorted[idx].title[1] + '<br>';
+                }
+
+                html =  "<p>" + body + "</p>";
+                tooltip.html(html).style("visibility", "visible");*/
             })
             .on("click", function(d, i) {
                 update_context(d.idx);
@@ -388,8 +413,8 @@ var Chart = function(year) {
                     .classed("hover", false)
                     .attr("stroke-width", "0px");
 
-                html =  "<p>" + d.title + "<br>" + d.code + "</p>";
-                tooltip.html(html).style("visibility", "hidden");
+                /*html =  "<p>" + d.title + "<br>" + d.code + "</p>";
+                tooltip.html(html).style("visibility", "hidden");*/
             });
         change_poster();
     };

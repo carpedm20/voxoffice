@@ -17,7 +17,7 @@ def root():
 def index():
     global PREFIX, STATIC
 
-    years = glob("./static/fox-*.json")
+    years = glob("./static/all-*.json")
     years = [re.findall(r'\d+',year)[0] for year in years]
     years.sort(reverse=True)
 
