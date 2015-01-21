@@ -9,6 +9,14 @@ window.onresize = function(event) {
         topSpacing : 100,
         bottomSpacing: document.getElementById('footer').scrollHeight + 10,
     });
+
+    /*$("svg").each(function() {
+        var width = $(this).width();
+        
+        array = this.getAttribute("viewBox").match(/\d+/g);
+        array[2] = width;
+        this.setAttribute("viewBox",array.join(" "));
+    });*/
 };
 
 $(document).ready(function() {
@@ -322,9 +330,15 @@ var Chart = function(year, class_name, genre) {
     this.process = function(error, data) {
         d3.select("#"+year).html('');
 
+        var big_width = width + margin.left + margin.right,
+            big_height = height + margin.top + margin.bottom;
+
         svg = d3.select("#"+year).append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom);
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 "+big_width+" "+big_height)
+            .attr("width", "100%")
+            //.attr("width", big_width)
+            .attr("height", big_height);
 
         context = svg.append("g")
             .attr("class", "context")
@@ -336,7 +350,7 @@ var Chart = function(year, class_name, genre) {
 
         mindate = format.parse(data['mindate']);
         maxdate = format.parse(data['maxdate']);
-        skipdate = Number(data['skipdate']);
+        skipdate = 5;
         y1 = data['y1'];
 
         xAxis.tickFormat(function(d) {
@@ -381,11 +395,10 @@ var Chart = function(year, class_name, genre) {
             }
         }
 
-        var n = layers.length,
-            m = ((maxdate-mindate)/(1000*60*60*24)/skipdate);
+        var n = layers.length;
 
-        x.domain([0, m - 1]);
-        x2.domain([0, m - 1]);
+        x.domain([0, d3.max(wiggle_stack(layers), function(layer) { return d3.max(layer.values, function(d) { return  d.x; }); })]);
+        x2.domain([0, d3.max(wiggle_stack(layers), function(layer) { return d3.max(layer.values, function(d) { return  d.x; }); })]);
         y.domain([0, d3.max(wiggle_stack(layers), function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })]);
 
         color.domain([0, layers.length]);
