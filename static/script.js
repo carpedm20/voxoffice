@@ -15,10 +15,14 @@ $(document).ready(function() {
     $("#fullpage").fullpage({
         autoScrolling: false,
         onLeave: function(index, nextIndex, direction){
-            current_section = Math.floor(nextIndex/2)-1;
-            console.log(current_section)
+            current_section = nextIndex;
 
-            var chart = charts[current_section];
+            if (nextIndex % 2 == 1) {
+                var chart = charts[Math.floor(nextIndex/2)-1];
+            } else {
+                var chart = charts2[nextIndex/2-2];
+            }
+
             if (global_type == 'zero' && chart.type == 'wiggle') {
                 chart.zero_transition();
             } else if (global_type == 'wiggle' && chart.type == 'zero') {
@@ -27,7 +31,13 @@ $(document).ready(function() {
 
             idx = chart.get_idx();
             $("#title").text(chart.get_layer()[idx].title);
-            $("#naver-link").attr("href", "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+chart.get_layer()[idx].code);
+            
+            var node = chart.get_layer()[idx];
+
+            if (node.type == 0)
+                $("#naver-link").attr("href", "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+node.code);
+            else
+                $("#naver-link").attr("href", "http://movie.naver.com/movie/bi/pi/basic.nhn?code="+node.code);
             $("#poster").attr('src', chart.get_layer()[idx].url);
         }
     });
@@ -47,7 +57,7 @@ $(document).ready(function() {
 
         $(".foxoffice").each(function() {
             year = $(this).attr('id');
-            chart = new Chart(year, genre);
+            chart = new Chart(year, 'foxoffice', genre);
             chart.get_json();
             charts.push(chart);
         });
@@ -73,6 +83,10 @@ $(document).ready(function() {
             chart = charts[idx];
             chart.update_color(color1, color2);
         }
+        for (var idx in charts2) {
+            chart = charts2[idx];
+            chart.update_color(color1, color2);
+        }
     });
 
     $("#sticker").sticky({
@@ -86,8 +100,13 @@ $(document).ready(function() {
     $('#graph-style input:radio').change( function(){
         console.log(current_section);
 
+        if (current_section % 2 == 1) {
+            var chart = charts[Math.floor(current_section/2)-1];
+        } else {
+            var chart = charts2[current_section/2-2];
+        }
+
         var type = $(this).attr('id');
-        var chart = charts[current_section];
 
         if (type == 'test1') {
             chart.wiggle_transition();
@@ -103,6 +122,7 @@ var format = d3.time.format("%Y%m%d");
 var format2 = d3.time.format("%b");
 
 var charts = [];
+var charts2 = [];
 
 zero_stack = d3.layout.stack()
     .offset("zero")
@@ -118,12 +138,13 @@ wiggle_stack = d3.layout.stack()
     .x(function(d) { return d.x; })
     .y(function(d) { return d.y; });
 
-var Chart = function(year, genre) {
+var Chart = function(year, class_name, genre) {
+    var class_name = class_name;
     var year = year;
 
     var margin = {top: 10, right: 10, bottom: 100, left: 20},
         margin2 = {top: 550, right: 10, bottom: 20, left: 20},
-        width = $(".foxoffice").parent().width() - margin.left - margin.right - 3,
+        width = $("."+class_name).parent().width() - margin.left - margin.right - 3,
         height = 620 - margin.top - margin.bottom,
         height2 = 620 - margin2.top - margin2.bottom;
 
@@ -330,6 +351,11 @@ var Chart = function(year, genre) {
             return format2(date);
         });
 
+        if (class_name == 'people')
+            type = 1;
+        else
+            type = 0;
+
         for (var idx in y1) {
             for (var jdx in y1[idx]) {
                 if (typeof layers[idx] == 'undefined') {
@@ -337,9 +363,11 @@ var Chart = function(year, genre) {
                     layers[idx] = {title : data['movies'][idx][2],
                                    url : data['movies'][idx][1][0],
                                    code : data['movies'][idx][0],
+                                   type : type,
                                    idx : idx,values:[]};
                     layers0[idx] = {title : data['movies'][idx][1],
                                     code : data['movies'][idx][0],
+                                    type : type,
                                     idx : idx,values:[]};
                 }
                 tmp = y1[idx][jdx];
@@ -392,6 +420,10 @@ var Chart = function(year, genre) {
 
         svg.selectAll(".layer")
             .attr("opacity", 1)
+            .on("dblclick", function(d, i) {
+                var win = window.open($("#naver-link").attr('href'), '_blank');
+                win.focus();
+            })
             .on("mouseover", function(d, i) {
                 change_poster_specific(d.title, d.code, d.url);
                 /*svg.selectAll(".layer")
@@ -452,13 +484,19 @@ var Chart = function(year, genre) {
 
     var change_poster = function() {
         $("#title").text(layers[context_idx].title);
-        $("#naver-link").attr('href', "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+layers[context_idx].code);
+        if (layers[context_idx].type == 0)
+            $("#naver-link").attr('href', "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+layers[context_idx].code);
+        else
+            $("#naver-link").attr('href', "http://movie.naver.com/movie/bi/pi/basic.nhn?code="+layers[context_idx].code);
         $("#poster").attr('src', layers[context_idx].url);
     }
 
     var change_poster_specific = function(title, code, url) {
         $("#title").text(title);
-        $("#naver-link").attr('href', "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+code);
+        if (class_name == 'people')
+            $("#naver-link").attr('href', "http://movie.naver.com/movie/bi/pi/basic.nhn?code="+code);
+        else
+            $("#naver-link").attr('href', "http://movie.naver.com/movie/bi/mi/basic.nhn?code="+code);
         $("#poster").attr('src', url);
     }
 };
@@ -466,7 +504,15 @@ var Chart = function(year, genre) {
 $(".foxoffice").each(function() {
     year = $(this).attr('id');
 
-    chart = new Chart(year, 'all');
+    chart = new Chart(year, 'foxoffice', 'all');
     chart.get_json();
     charts.push(chart);
+});
+
+$(".people").each(function() {
+    year = $(this).attr('id');
+
+    chart = new Chart(year, 'people', 'people');
+    chart.get_json();
+    charts2.push(chart);
 });
