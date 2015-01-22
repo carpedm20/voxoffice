@@ -1,7 +1,7 @@
 VoxOffice
 =========
 
-A Data Visualization of Box Office History : [link](http://pail.unist.ac.kr/carpedm20/vox/)
+A Data Visualization of Box Office History. [link](http://pail.unist.ac.kr/carpedm20/vox/)
 
 
 Screenshot
