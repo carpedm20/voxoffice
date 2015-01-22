@@ -1,11 +1,15 @@
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 
 body {
-  font-family: Ubuntu,sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   min-width: 970px;
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+}
+
+p, a, h2, span, label, text {
+  font-family: 'Ubuntu', sans-serif;
 }
 
 .toast {
@@ -13,16 +17,12 @@ body {
   background: rgba(20,24,28,.95);
 }
 
-h1.header {
-  font-family:  Ubuntu,sans-serif;
-}
-
-span.ko, h2.ko {
-  font-family: 'Nanum Barun Gothic', 'Nanum Gothic', serif;
+.ko {
+  font-family: 'Nanum Barun Gothic', 'Nanum Gothic', serif !important;
 }
 
 .ko-title {
-  font-size: 1.6em !important;
+  font-size: 1.3em !important;
 }
 
 .foxoffice, .people {
