@@ -1,7 +1,11 @@
 VoxOffice
 =========
 
-History of box office
+A Data Visualization of Box Office History.
+
+
+Screenshot
+----------
 
 
 Copyright
