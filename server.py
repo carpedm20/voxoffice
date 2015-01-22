@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import url_for, redirect, render_template
-app = Flask(__name__, static_url_path="/carpedm20/fox/static",)
+app = Flask(__name__, static_url_path="/carpedm20/vox/static",)
 
 import re
 from glob import glob
@@ -13,7 +13,7 @@ STATIC = "%sstatic" % PREFIX
 def root():
     return redirect(url_for('index'))
 
-@app.route('/carpedm20/fox/')
+@app.route('/carpedm20/vox/')
 def index():
     global PREFIX, STATIC
 
