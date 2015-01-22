@@ -10,13 +10,13 @@ window.onresize = function(event) {
         bottomSpacing: document.getElementById('footer').scrollHeight + 10,
     });
 
-    /*$("svg").each(function() {
-        var width = $(this).width();
+    $("svg").each(function() {
+        /*var width = $(this).width();
         
         array = this.getAttribute("viewBox").match(/\d+/g);
         array[2] = width;
-        this.setAttribute("viewBox",array.join(" "));
-    });*/
+        this.setAttribute("viewBox",array.join(" "));*/
+    });
 };
 
 var move_to = function(id) {
@@ -67,12 +67,7 @@ $(document).ready(function() {
             $(this).html('<div class="row center loading" width="1085" height="620"><div class="preloader-wrapper big active"> <div class="spinner-layer spinner-blue"> <div class="circle-clipper left"> <div class="circle"></div> </div><div class="gap-patch"> <div class="circle"></div> </div><div class="circle-clipper right"> <div class="circle"></div> </div> </div> </div>'); 
         });
 
-        $(".foxoffice").each(function() {
-            year = $(this).attr('id');
-            chart = new Chart(year, 'foxoffice', genre);
-            chart.get_json();
-            charts.push(chart);
-        });
+        update_movie(genre, global_type);
     });
 
     $("a.theme").click(function() {
@@ -110,8 +105,6 @@ $(document).ready(function() {
     $("#sticker").css('height', $(".section").height());
 
     $('#graph-style input:radio').change( function(){
-        console.log(current_section);
-
         if (current_section % 2 == 1) {
             var chart = charts[Math.floor(current_section/2)-1];
         } else {
@@ -150,16 +143,18 @@ wiggle_stack = d3.layout.stack()
     .x(function(d) { return d.x; })
     .y(function(d) { return d.y; });
 
-var Chart = function(year, class_name, genre) {
+var Chart = function(year, class_name, genre, type) {
     var class_name = class_name;
     var year = year;
     var cidx;
 
+    var height_base = $(window).height()*0.6;
+
     var margin = {top: 10, right: 10, bottom: 100, left: 20},
-        margin2 = {top: 600, right: 10, bottom: 20, left: 20},
+        margin2 = {top: height_base, right: 10, bottom: 20, left: 20},
         width = $("."+class_name).parent().width() - margin.left - margin.right - 3,
-        height = 680 - margin.top - margin.bottom,
-        height2 = 680 - margin2.top - margin2.bottom;
+        height = height_base + 80 - margin.top - margin.bottom,
+        height2 = height_base + 80 - margin2.top - margin2.bottom;
 
     var svg, context, focus;
 
@@ -171,7 +166,7 @@ var Chart = function(year, class_name, genre) {
     var xAxis = d3.svg.axis().scale(x).orient("bottom")
         .ticks(3, function(d, i) {}),
         xAxis2 = d3.svg.axis().scale(x2).orient("bottom")
-        .ticks(12, function(d, i) {});
+        .ticks(8, function(d, i) {});
 
     var brush = d3.svg.brush()
         .x(x2)
@@ -230,7 +225,11 @@ var Chart = function(year, class_name, genre) {
         return year.match(/\d+/g)[0];
     }
 
+    this.download = false;
+
     this.get_json = function() {
+        this.download = false;
+
         year_number = year.match(/\d+/g)[0];
         d3.json("./static/"+this.genre+"-"+year_number+".json", this.process);
     };
@@ -248,7 +247,7 @@ var Chart = function(year, class_name, genre) {
         return layers;
     }
 
-    this.type = 'wiggle';
+    this.type = type;
 
     this.zero_transition = function() {
         this.type = 'zero';
@@ -343,11 +342,11 @@ var Chart = function(year, class_name, genre) {
             big_height = height + margin.top + margin.bottom;
 
         svg = d3.select("#"+year).append("svg")
-            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("preserveAspectRatio", "xMinYMin")
             .attr("viewBox", "0 0 "+big_width+" "+big_height)
             .attr("width", "100%")
             //.attr("width", big_width)
-            .attr("height", big_height);
+            .attr("height", "80%");
 
         context = svg.append("g")
             .attr("class", "context")
@@ -375,7 +374,7 @@ var Chart = function(year, class_name, genre) {
         });
 
         if (class_name == 'people')
-            nocde_type = 1;
+            node_type = 1;
         else
             node_type= 0;
 
@@ -406,14 +405,19 @@ var Chart = function(year, class_name, genre) {
 
         var n = layers.length;
 
-        x.domain([0, d3.max(wiggle_stack(layers), function(layer) { return d3.max(layer.values, function(d) { return  d.x; }); })]);
-        x2.domain([0, d3.max(wiggle_stack(layers), function(layer) { return d3.max(layer.values, function(d) { return  d.x; }); })]);
-        y.domain([0, d3.max(wiggle_stack(layers), function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })]);
+        if (global_type == 'wiggle')
+            var stacked_layer = wiggle_stack(layers);
+        else
+            var stacked_layer = zero_stack(layers);
+
+        x.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.x; }); })]);
+        x2.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.x; }); })]);
+        y.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })]);
 
         color.domain([0, layers.length]);
 
         focus.selectAll(".layer")
-            .data(wiggle_stack(layers))
+            .data(stacked_layer)
             .enter().append("path")
             .attr("class", "layer")
             .attr("d", function(d) { return area(d.values); })
@@ -448,11 +452,12 @@ var Chart = function(year, class_name, genre) {
             })
             .on("mouseover", function(d, i) {
                 change_poster_specific(d.title, d.code, d.url);
-                /*svg.selectAll(".layer")
+                svg.selectAll(".layer")
                     .attr("opacity", function(d, j) {
                         return j != i ? 0.8 : 1;
                     })
 
+                /*
                 mousex = d3.mouse(this);
                 mousex = mousex[0] + 15;
                 vertical_line.style("left", mousex + "px");*/
@@ -496,9 +501,15 @@ var Chart = function(year, class_name, genre) {
                     charts_to_find = charts;
 
                 for (var idx in charts_to_find) {
-                    if (idx != cidx) {
-                        chart = charts_to_find[idx];
-                        result = chart.find_code(d.code);
+                    if (Number(idx) != cidx) {
+                        var chart = charts_to_find[idx];
+
+                        var title = d.title;
+                        var idx = title.indexOf("(");
+
+                        if (idx != -1)
+                            title = title.slice(0, title.indexOf("(")).trim()
+                        result = chart.find_code(d.code, title);
                     }
                 }
             })
@@ -516,6 +527,17 @@ var Chart = function(year, class_name, genre) {
                 tooltip.html(html).style("visibility", "hidden");*/
             });
         change_poster();
+
+        this.download = true;
+
+        var cidx = get_cidx() + 1;
+        if (cidx < charts.length) {
+            if (class_name == 'people')
+                next_chart = charts2[cidx];
+            else
+                next_chart = charts[cidx];
+            next_chart.get_json();
+        }
     };
 
     var get_cidx = function() {
@@ -526,7 +548,7 @@ var Chart = function(year, class_name, genre) {
         cidx = idx;
     }
 
-    this.find_code = function(code) {
+    this.find_code = function(code, title) {
         for (var idx in layers) {
             layer = layers[idx];
 
@@ -538,7 +560,7 @@ var Chart = function(year, class_name, genre) {
                 else
                     var id = "#mov-" + year;
 
-                toast("<a class='year-toast orange-text'; href='javascript:void(0);' onclick='move_to(\"" + id + "\")'>" + layer.title + " found in " + year + "</a>", 4000);
+                toast("<a class='year-toast orange-text'; href='javascript:void(0);' onclick='move_to(\"" + id + "\")'>" + title + " found in " + year + "</a>", 4000);
 
                 clicked_idx = layer.idx;
                 update_context(layer.idx);
@@ -565,20 +587,29 @@ var Chart = function(year, class_name, genre) {
     }
 };
 
-$(".foxoffice").each(function() {
-    year = $(this).attr('id');
+var update_movie = function(genre, type) {
+    $(".foxoffice").each(function() {
+        year = $(this).attr('id');
 
-    chart = new Chart(year, 'foxoffice', 'all');
-    chart.set_cidx(charts.length);
-    chart.get_json();
-    charts.push(chart);
-});
+        chart = new Chart(year, 'foxoffice', genre, type);
+        chart.set_cidx(charts.length);
+        charts.push(chart);
+    });
 
-$(".people").each(function() {
-    year = $(this).attr('id');
+    charts[0].get_json();
+}
 
-    chart = new Chart(year, 'people', 'people');
-    chart.get_json();
-    chart.set_cidx(charts2.length);
-    charts2.push(chart);
-});
+var update_people = function(type) {
+    $(".people").each(function() {
+        year = $(this).attr('id');
+
+        chart = new Chart(year, 'people', 'people', type);
+        chart.set_cidx(charts2.length);
+        charts2.push(chart);
+    });
+
+    charts2[0].get_json();
+}
+
+update_movie('all', 'wiggle');
+update_people('wiggle');
