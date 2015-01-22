@@ -112,6 +112,44 @@ end  : 2015-??-??
     </div>
 
     <div class="row">
+      <div class="section">
+        <h2 class="header center orange-text">그래프 읽는법</h2>
+        <br/>
+        <div class="container">
+          <div class="col s6">
+            <div class="card info-card blue-grey darken-1">
+              <div class="card-content white-text center">
+                <span class="card-title">두꺼울수록 인기가 있었던 영화 (하루 기준)</span>
+                <div class="row"></div>
+                <div class="center">
+                  <img src="{{ url_for('static', filename='weight_ko.png') }}" style="width: 80%;">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col s6">
+            <div class="card info-card blue-grey darken-1">
+              <div class="card-content white-text center">
+                <span class="card-title">색이 진할수록 인기가 있었던 영화 (1년 기준)</span>
+                <div class="row"></div>
+                <div class="col s12">
+                  <img src="{{ url_for('static', filename='color.png') }}" style="width:80%">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col s12">
+            <div class="card">
+              <div class="card-image">
+                <img src="{{ url_for('static', filename='insight_ko.png') }}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
       <div id="base" class="col s2">
         <div id="sticker">
         {% block sticker %}{% endblock %}
