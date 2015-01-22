@@ -1,3 +1,5 @@
+progressJs().start();
+
 current_section = 3;
 global_type = 'wiggle';
 
@@ -54,8 +56,6 @@ $(document).ready(function() {
             $("#poster").attr('src', chart.get_layer()[idx].url);
         }
     });
-
-    $(".dropdown-button").dropdown();
 
     $("a.genre").click(function() {
         genre = $(this).attr('id');
@@ -530,11 +530,17 @@ var Chart = function(year, class_name, genre, type) {
 
         this.download = true;
 
+        progressJs().increase(6.25);
+
         var cidx = get_cidx() + 1;
+
+        if (cidx == 8 && class_name == 'people') {
+            progressJs().end();
+        }
         if (cidx < charts.length) {
-            if (class_name == 'people')
+            if (class_name == 'people') {
                 next_chart = charts2[cidx];
-            else
+            } else
                 next_chart = charts[cidx];
             next_chart.get_json();
         }
@@ -588,6 +594,7 @@ var Chart = function(year, class_name, genre, type) {
 };
 
 var update_movie = function(genre, type) {
+
     $(".foxoffice").each(function() {
         year = $(this).attr('id');
 
