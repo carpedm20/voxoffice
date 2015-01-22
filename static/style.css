@@ -6,6 +6,11 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
+.toast {
+  background: rgba(20,24,28,.95);
+}
+
+
 .foxoffice {
   position: relative;
 }

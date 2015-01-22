@@ -19,6 +19,10 @@ window.onresize = function(event) {
     });*/
 };
 
+var move_to = function(id) {
+    $('html,body').animate({scrollTop: $(id).offset().top});
+};
+
 $(document).ready(function() {
     $("#fullpage").fullpage({
         autoScrolling: false,
@@ -149,12 +153,13 @@ wiggle_stack = d3.layout.stack()
 var Chart = function(year, class_name, genre) {
     var class_name = class_name;
     var year = year;
+    var cidx;
 
     var margin = {top: 10, right: 10, bottom: 100, left: 20},
-        margin2 = {top: 550, right: 10, bottom: 20, left: 20},
+        margin2 = {top: 600, right: 10, bottom: 20, left: 20},
         width = $("."+class_name).parent().width() - margin.left - margin.right - 3,
-        height = 620 - margin.top - margin.bottom,
-        height2 = 620 - margin2.top - margin2.bottom;
+        height = 680 - margin.top - margin.bottom,
+        height2 = 680 - margin2.top - margin2.bottom;
 
     var svg, context, focus;
 
@@ -220,6 +225,10 @@ var Chart = function(year, class_name, genre) {
         .style("left", "75px");
 
     this.genre = genre;
+
+    var get_year = function() {
+        return year.match(/\d+/g)[0];
+    }
 
     this.get_json = function() {
         year_number = year.match(/\d+/g)[0];
@@ -366,9 +375,9 @@ var Chart = function(year, class_name, genre) {
         });
 
         if (class_name == 'people')
-            type = 1;
+            nocde_type = 1;
         else
-            type = 0;
+            node_type= 0;
 
         for (var idx in y1) {
             for (var jdx in y1[idx]) {
@@ -377,11 +386,11 @@ var Chart = function(year, class_name, genre) {
                     layers[idx] = {title : data['movies'][idx][2],
                                    url : data['movies'][idx][1][0],
                                    code : data['movies'][idx][0],
-                                   type : type,
+                                   type : node_type,
                                    idx : idx,values:[]};
                     layers0[idx] = {title : data['movies'][idx][1],
                                     code : data['movies'][idx][0],
-                                    type : type,
+                                    type : node_type,
                                     idx : idx,values:[]};
                 }
                 tmp = y1[idx][jdx];
@@ -422,7 +431,7 @@ var Chart = function(year, class_name, genre) {
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
 
-        update_context(0);
+        update_context(clicked_idx);
 
         context.append("g")
             .attr("class", "x brush")
@@ -478,6 +487,20 @@ var Chart = function(year, class_name, genre) {
 
                 update_context(d.idx);
                 change_poster();
+
+                cidx = get_cidx();
+
+                if (class_name == 'people')
+                    charts_to_find = charts2;
+                else
+                    charts_to_find = charts;
+
+                for (var idx in charts_to_find) {
+                    if (idx != cidx) {
+                        chart = charts_to_find[idx];
+                        result = chart.find_code(d.code);
+                    }
+                }
             })
             .on("mouseout", function(d, i) {
                 svg.selectAll(".layer")
@@ -494,6 +517,34 @@ var Chart = function(year, class_name, genre) {
             });
         change_poster();
     };
+
+    var get_cidx = function() {
+        return cidx;
+    }
+
+    this.set_cidx = function(idx) {
+        cidx = idx;
+    }
+
+    this.find_code = function(code) {
+        for (var idx in layers) {
+            layer = layers[idx];
+
+            if (layer.code == code) {
+                var year = get_year();
+
+                if (class_name == 'people')
+                    var id = "#peo-" + year;
+                else
+                    var id = "#mov-" + year;
+
+                toast("<a class='year-toast orange-text'; href='javascript:void(0);' onclick='move_to(\"" + id + "\")'>" + layer.title + " found in " + year + "</a>", 4000);
+
+                clicked_idx = layer.idx;
+                update_context(layer.idx);
+            }
+        }
+    }
 
     var change_poster = function() {
         $("#title").text(layers[context_idx].title);
@@ -518,6 +569,7 @@ $(".foxoffice").each(function() {
     year = $(this).attr('id');
 
     chart = new Chart(year, 'foxoffice', 'all');
+    chart.set_cidx(charts.length);
     chart.get_json();
     charts.push(chart);
 });
@@ -527,5 +579,6 @@ $(".people").each(function() {
 
     chart = new Chart(year, 'people', 'people');
     chart.get_json();
+    chart.set_cidx(charts2.length);
     charts2.push(chart);
 });

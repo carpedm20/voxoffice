@@ -73,13 +73,45 @@
 {% block content %}
 <div id="fullpage">
   {% for year in years %}
-  <div class="section">
+  <div class="section" id="mov-{{year}}">
     <h2 class="header center orange-text ubuntu">Movie of {{year}}</h2>
-    <div id="all-{{year}}" class="foxoffice"></div>
+    <div id="all-{{year}}" class="foxoffice">
+      <div class="row center loading" width="1085" height="620">
+        <div class="preloader-wrapper big active">
+          <div class="spinner-layer spinner-blue">
+            <div class="circle-clipper left">
+              <div class="circle"> </div>
+            </div>
+            <div class="gap-patch">
+              <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div> 
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="section">
+  <div class="section" id="peo-{{year}}">
     <h2 class="header center orange-text ubuntu">People of {{year}}</h2>
-    <div id="people-{{year}}" class="people"></div>
+    <div id="people-{{year}}" class="people">
+      <div class="row center loading" width="1085" height="620">
+        <div class="preloader-wrapper big active">
+          <div class="spinner-layer spinner-blue">
+            <div class="circle-clipper left">
+              <div class="circle"> </div>
+            </div>
+            <div class="gap-patch">
+              <div class="circle"></div>
+            </div>
+            <div class="circle-clipper right">
+              <div class="circle"></div>
+            </div>
+          </div> 
+        </div>
+      </div>
+    </div>
   </div>
   {% endfor %}
 </div>
