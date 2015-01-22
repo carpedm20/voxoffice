@@ -32,7 +32,7 @@ window.onresize = function(event) {
 };
 
 var move_to = function(id) {
-    $('html,body').animate({scrollTop: $(id).offset().top});
+    $('html,body').animate({scrollTop: $(id).offset().top - 40 - $("h2").height()});
 };
 
 $(document).ready(function() {
