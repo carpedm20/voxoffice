@@ -28,11 +28,12 @@ $(document).ready(function() {
         autoScrolling: false,
         onLeave: function(index, nextIndex, direction){
             current_section = nextIndex;
+            console.log(current_section);
 
-            if (nextIndex % 2 == 1) {
-                var chart = charts[Math.floor(nextIndex/2)-1];
+            if (current_section % 2 == 1) {
+                var chart = charts2[Math.floor(current_section/2)-2];
             } else {
-                var chart = charts2[nextIndex/2-2];
+                var chart = charts[current_section/2-2];
             }
 
             if (global_type == 'zero' && chart.type == 'wiggle') {
@@ -106,9 +107,9 @@ $(document).ready(function() {
 
     $('#graph-style input:radio').change( function(){
         if (current_section % 2 == 1) {
-            var chart = charts[Math.floor(current_section/2)-1];
+            var chart = charts2[Math.floor(current_section/2)-2];
         } else {
-            var chart = charts2[current_section/2-2];
+            var chart = charts[current_section/2-2];
         }
 
         var type = $(this).attr('id');
@@ -452,12 +453,11 @@ var Chart = function(year, class_name, genre, type) {
             })
             .on("mouseover", function(d, i) {
                 change_poster_specific(d.title, d.code, d.url);
-                svg.selectAll(".layer")
+                /*svg.selectAll(".layer")
                     .attr("opacity", function(d, j) {
                         return j != i ? 0.8 : 1;
                     })
 
-                /*
                 mousex = d3.mouse(this);
                 mousex = mousex[0] + 15;
                 vertical_line.style("left", mousex + "px");*/
