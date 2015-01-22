@@ -8,7 +8,7 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
-p, a, h2, span, label, text {
+p, a, h1, h2, span, label, text {
   font-family: 'Ubuntu', sans-serif;
 }
 
