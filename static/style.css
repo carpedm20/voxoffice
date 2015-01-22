@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
 body {
   font-family: Ubuntu,sans-serif;
   min-width: 970px;
@@ -11,6 +13,17 @@ body {
   background: rgba(20,24,28,.95);
 }
 
+h1.header {
+  font-family:  Ubuntu,sans-serif;
+}
+
+span.ko, h2.ko {
+  font-family: 'Nanum Barun Gothic', 'Nanum Gothic', serif;
+}
+
+.ko-title {
+  font-size: 1.6em !important;
+}
 
 .foxoffice, .people {
   width: 100%;
