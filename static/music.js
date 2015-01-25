@@ -578,11 +578,11 @@ var Chart = function(year, class_name, genre, type) {
 
         this.download = true;
 
-        progressJs().increase(6.25);
+        progressJs().increase(18);
 
         var cidx = get_cidx() + 1;
 
-        if (cidx == 8 && class_name == 'people') {
+        if (cidx == 7) {// && class_name == 'people') {
             progressJs().end();
         }
         if (cidx < charts.length) {
