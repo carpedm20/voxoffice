@@ -42,11 +42,7 @@ $(document).ready(function() {
             current_section = nextIndex;
             console.log(current_section);
 
-            if (current_section % 2 == 1) {
-                var chart = charts2[Math.floor(current_section/2)-2];
-            } else {
-                var chart = charts[current_section/2-2];
-            }
+            var chart = charts[current_section-4];
 
             if (global_type == 'zero' && chart.type == 'wiggle') {
                 chart.zero_transition();
@@ -116,11 +112,7 @@ $(document).ready(function() {
     $("#sticker").css('height', $(".section").height());
 
     $('#graph-style input:radio').change( function(){
-        if (current_section % 2 == 1) {
-            var chart = charts2[Math.floor(current_section/2)-2];
-        } else {
-            var chart = charts[current_section/2-2];
-        }
+        var chart = charts[current_section-4];
 
         var type = $(this).attr('id');
 
@@ -336,6 +328,12 @@ var Chart = function(year, class_name, genre, type) {
 
         context.selectAll("g").remove();
 
+        context.append("g")
+            .attr("class", "x brush")
+            .call(brush)
+        .selectAll("rect")
+            .attr("y", -6)
+            .attr("height", height2 + 7);
         context.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height2 + ")")
