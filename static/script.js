@@ -417,10 +417,13 @@ var Chart = function(year, class_name, genre, type) {
 
         var n = layers.length;
 
-        if (global_type == 'wiggle')
+        if (global_type == 'wiggle') {
             var stacked_layer = wiggle_stack(layers);
-        else
+            y.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })]);
+        } else {
             var stacked_layer = zero_stack(layers);
+            y.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); }) + 0.5]);
+        }
 
         x.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.x; }); })]);
         x2.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.x; }); })]);

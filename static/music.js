@@ -267,7 +267,7 @@ var Chart = function(year, class_name, genre, type) {
     this.zero_transition = function() {
         this.type = 'zero';
         zer = zero_stack(layers);
-        y.domain([0, d3.max(zer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })+0.5]);
+        y.domain([0, d3.max(zer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })+1.5]);
         focus.selectAll(".layer")
             .data(function() {
                 return zer;
@@ -400,13 +400,18 @@ var Chart = function(year, class_name, genre, type) {
                 if (typeof layers[idx] == 'undefined') {
                     if (class_name == 'people') {
                         artist_code = data['musics'][idx][0].toString();
+                    } else {
+                        artist_code = data['musics'][idx][3].toString();
+                    }
 
-                        if (artist_code.length == 5)
-                            a = "0"+artist_code.slice(0,2);
-                        else if (artist_code.length == 4)
-                            a = "00"+artist_code.slice(0,1);
-                        else
-                            a = artist_code.slice(0,3);
+                    if (artist_code.length == 5)
+                        a = "0"+artist_code.slice(0,2);
+                    else if (artist_code.length == 4)
+                        a = "00"+artist_code.slice(0,1);
+                    else
+                        a = artist_code.slice(0,3);
+
+                    if (class_name == 'people') {
                         layers[idx] = {title: data['musics'][idx][1],
                                        code : artist_code,
                                        type : node_type,
@@ -422,7 +427,7 @@ var Chart = function(year, class_name, genre, type) {
                                     artist: data['musics'][idx][2],
                                     album_id: data['musics'][idx][3],
                                     artist_id: data['musics'][idx][4],
-                                    url : "http://image.music.naver.net/album/204/000/"+data['musics'][idx][3].toString().slice(0,3)+"/"+data['musics'][idx][3]+".jpg",
+                                    url : "http://image.music.naver.net/album/204/000/"+a+"/"+data['musics'][idx][3]+".jpg",
                                     code : data['musics'][idx][0],
                                     type : node_type,
                                     idx : idx,values:[]};
@@ -430,7 +435,7 @@ var Chart = function(year, class_name, genre, type) {
                                     artist: data['musics'][idx][2],
                                     album_id: data['musics'][idx][3],
                                     artist_id: data['musics'][idx][4],
-                                    url : "http://image.music.naver.net/album/204/000/"+data['musics'][idx][3].toString().slice(0,3)+"/"+data['musics'][idx][3]+".jpg",
+                                    url : "http://image.music.naver.net/album/204/000/"+a+"/"+data['musics'][idx][3]+".jpg",
                                     code : data['musics'][idx][0],
                                     type : node_type,
                                     idx : idx,values:[]};
@@ -449,14 +454,16 @@ var Chart = function(year, class_name, genre, type) {
 
         var n = layers.length;
 
-        if (global_type == 'wiggle')
+        if (global_type == 'wiggle') {
             var stacked_layer = wiggle_stack(layers);
-        else
+            y.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })]);
+        } else {
             var stacked_layer = zero_stack(layers);
+            y.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); }) + 1.5]);
+        }
 
         x.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.x; }); })]);
         x2.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.x; }); })]);
-        y.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })]);
 
         color.domain([0, layers.length]);
 
