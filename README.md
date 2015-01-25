@@ -12,6 +12,7 @@ Screenshot
 
 
 ![alt_tag](https://raw.githubusercontent.com/carpedm20/voxoffice/master/demo/1.png)
+![alt_tag](https://raw.githubusercontent.com/carpedm20/voxoffice/master/demo/3.png)
 ![alt_tag](https://raw.githubusercontent.com/carpedm20/voxoffice/master/demo/2.png)
 
 Copyright
