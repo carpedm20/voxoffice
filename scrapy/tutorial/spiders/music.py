@@ -74,12 +74,20 @@ class RankSpider(BaseSpider):
 
                 artist_name = artist.xpath("./a/text()")[0].extract()
             else:
-                href = artist.xpath("./a/@href")[0].extract()
-                artist_id = int(href[href.find('artistId=')+9:])
+                try:
+                    href = artist.xpath("./a/@href")[0].extract()
+                    artist_id = int(href[href.find('artistId=')+9:])
 
-                artist_name = artist.xpath("./a/span/text()")[0].extract().strip()
+                    artist_name = artist.xpath("./a/span/text()")[0].extract().strip()
+                except:
+                    artist_name = artist.xpath("./span/span/text()")[0].extract().strip()
+                    artist_id = -1
 
-            music_name = music.xpath("./a/span/text()")[0].extract()
+            try:
+                music_name = music.xpath("./a/span/text()")[0].extract()
+            except:
+                music_name = music.xpath("./span/span/text()")[0].extract()
+            #print idx
 
             music= Music()
             music['name'] = music_name
@@ -89,5 +97,7 @@ class RankSpider(BaseSpider):
             music['album_id'] = album_id
             music['rank'] = idx + 1
             music['date'] = date
+
+            items.append(music)
 
         return items

@@ -23,5 +23,15 @@ def index():
 
     return render_template('index.html', years = years)
 
+@app.route('/carpedm20/vox/music')
+def music():
+    global PREFIX, STATIC
+
+    years = glob("./static/music-*.json")
+    years = [re.findall(r'\d+',year)[0] for year in years]
+    years.sort(reverse=True)
+
+    return render_template('index.html', years = years)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
