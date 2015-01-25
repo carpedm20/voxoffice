@@ -37,8 +37,6 @@ for year in xrange(2008, 2015):
 
             if i['rank'] > MAX_RANK:
                 continue
-            if i['artist'] == u'Various Artists':
-                continue
 
             if code == -1:
                 try:
@@ -57,9 +55,10 @@ for year in xrange(2008, 2015):
                     continue
 
             artists[code] += 1
-            artist[code] = i['artist']
 
+            artist[code] = i['artist']
             artist_id[code] = i['artist_id']
+
             dates[int(i['date'])] += 1
 
     artists_key = artists.keys()
@@ -106,11 +105,6 @@ for year in xrange(2008, 2015):
             if y1[new_code][date]:
                 pass
                 #print y1[new_code][date] 
-
-    try:
-        tmp = new_music_title[0]
-    except:
-        raise ("rrrr")
 
     ans = {'musics' : new_music_title,
             'y1' : y1.tolist() }

@@ -181,7 +181,7 @@ var Chart = function(year, class_name, genre, type) {
     var xAxis = d3.svg.axis().scale(x).orient("bottom")
         .ticks(3, function(d, i) {}),
         xAxis2 = d3.svg.axis().scale(x2).orient("bottom")
-        .ticks(8, function(d, i) {});
+        .ticks(16, function(d, i) {});
 
     var brush = d3.svg.brush()
         .x(x2)
@@ -681,4 +681,4 @@ var update_people = function(type) {
 }
 
 update_music('total', 'wiggle');
-update_people('people');
+//update_people('people');
