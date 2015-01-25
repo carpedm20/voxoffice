@@ -330,6 +330,7 @@ var Chart = function(year, class_name, genre, type) {
             .attr("d", function(d) { return area2(d.values); })
             .style("fill", function(d) { return context_color; });
 
+        context.selectAll("g").remove();
         context.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height2 + ")")

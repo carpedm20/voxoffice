@@ -1,5 +1,11 @@
 {% extends "layout.html" %}
 
+{% block css %}
+.x.axis g text {
+  fill: white;
+}
+{% endblock %}
+
 {% block navbar %}
 <li><a href="/carpedm20/music">VoxMusic</a></li>
 {% endblock %}
@@ -16,7 +22,7 @@
       <p class="col s12 light">A Data Visualization of Box Office History.<br/>"What was the greatest movies in 2007?"</p>
     </div>
     <div class="row center">
-      <p class="footnote">Streamgraph algorithm, colors, and data generation inspired by <a href="http://www.leebyron.com/else/streamgraph/">this paper</a></p>
+      <p class="footnote">Streamgraph algorithm, colors, and data generation inspired by <a href="http://www.leebyron.com/else/streamgraph/" target="_blank">this paper</a></p>
       <p class="red-text accent-1">* View on Desktop, not on Mobile *</p>
       <a href="https://github.com/carpedm20/voxoffice" target="_blank" class="waves-effect waves-light blue-grey darken-3 btn">Github</a>
       <p class="dark-grey accent-1"><b>Scroll down</b> to enjoy yourself :)</p>

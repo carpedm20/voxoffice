@@ -32,6 +32,10 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
+  <style>
+  {% block css %}{% endblock %}
+  </style>
+
   <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/aight/1.2.2/aight.d3.min.js"></script>
@@ -77,7 +81,7 @@
       </div>
     </div>
 
-    <footer class="blue-grey darken-1" id="footer">
+    <footer class="blue-grey {{ footer }}" id="footer">
       <div class="container">
         <div class="row">
           <div class="col s9">

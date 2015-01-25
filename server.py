@@ -23,7 +23,8 @@ def index():
 
     return render_template('index.html', years = years,
                                          body_class = 'yir-generic',
-                                         nav_bar_class = 'nav-bar')
+                                         nav_bar_class = 'nav-bar',
+                                         footer = 'darken-1')
 
 @app.route('/carpedm20/music/')
 def music():
@@ -35,7 +36,8 @@ def music():
 
     return render_template('music.html', years = years,
                                          body_class = 'yir-generic-music',
-                                         nav_bar_class = 'nav-bar-music')
+                                         nav_bar_class = 'nav-bar-music',
+                                         footer = 'lighten-2')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

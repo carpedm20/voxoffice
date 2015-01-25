@@ -1,5 +1,12 @@
 {% extends "layout.html" %}
 
+{% block css %}
+.x.axis g text {
+  fill: #34495e;
+  font-weight: 600;
+}
+{% endblock %}
+
 {% block navbar %}
 <li><a href="/carpedm20/vox">VoxOffice</a></li>
 {% endblock %}
@@ -16,9 +23,9 @@
       <p class="col s12 light blue-grey-text">A Data Visualization of Music Chart History.<br/>"What was the famous music in 2007?"</p>
     </div>
     <div class="row center">
-      <p class="footnote blue-grey-text">Streamgraph algorithm, colors, and data generation inspired by <b><a class="indigo-text" href="http://www.leebyron.com/else/streamgraph/">this paper</a></b></p>
+      <p class="footnote blue-grey-text">Streamgraph algorithm, colors, and data generation inspired by <b><a class="indigo-text" href="http://www.leebyron.com/else/streamgraph/" target="_blank">this paper</a></b></p>
       <p class="red-text accent-1">* View on Desktop, not on Mobile *</p>
-      <a href="https://github.com/carpedm20/voxoffice" target="_blank" class="waves-effect waves-light blue-grey darken-3 btn">Github</a>
+      <a href="https://github.com/carpedm20/voxoffice" target="_blank" class="waves-effect waves-light indigo lighten-2 btn">Github</a>
       <p class="dark-grey accent-1"><b>Scroll down</b> to enjoy yourself :)</p>
     </div>
   </div>
@@ -112,8 +119,11 @@
           <div class="card-image">
             <img id="poster" src="https://avatars3.githubusercontent.com/u/3346407?v=3&s=460">
           </div>
-          <div class="card-content center">
+          <div class="card-content center blue-grey-text">
               <span id="title" class="ko">carpedm20</span>
+          </div>
+          <div class="card-action center blue-grey-text">
+              <a id="artist" href='#' target="_blank" class="blue-grey-text">carpedm20</a>
           </div>
         </a>
       </div>
@@ -123,9 +133,9 @@
     <label>Genre</label>
     <br/>
     <br/>
-    <a id="all" class="waves-effect waves-light genre btn cyan">All</a>
-    <a id="domestic" class="waves-effect waves-light genre blue-grey btn">Domestic</a>
-    <a id="oversea" class="waves-effect waves-light genre blue-grey btn">Oversea</a>
+    <a id="total" class="waves-effect waves-light genre btn music-genre-btn indigo">All</a>
+    <a id="domestic" class="waves-effect waves-light genre btn music-genre-btn">Domestic</a>
+    <a id="oversea" class="waves-effect waves-light genre btn music-genre-btn">Oversea</a>
   </div>
   <div class="row">
     <form id="graph-style" action="#">

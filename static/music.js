@@ -5,7 +5,7 @@ window.mobilecheck = function() {
 }
 
 if (window.mobilecheck()) {
-    alert("Voxoffice는 모바일 브라우저를 지원하지 않습니다");
+    alert("VoxMusic은 모바일 브라우저를 지원하지 않습니다");
 }
 
 progressJs().start();
@@ -70,8 +70,8 @@ $(document).ready(function() {
     $("a.genre").click(function() {
         genre = $(this).attr('id');
 
-        $("a.genre").removeClass('teal');
-        $(this).addClass('teal');
+        $("a.genre").removeClass('indigo');
+        $(this).addClass('indigo');
 
         charts = [];
         $(".foxoffice").each(function() {
@@ -169,6 +169,10 @@ var Chart = function(year, class_name, genre, type) {
 
     var svg, context, focus;
 
+    this.get_svg = function () {
+        return svg;
+    }
+
     var x = d3.scale.linear().range([0, width]),
         x2 = d3.scale.linear().range([0, width]),
         y = d3.scale.linear().range([height, 0]),
@@ -190,7 +194,7 @@ var Chart = function(year, class_name, genre, type) {
     };
 
     var color = d3.scale.linear()
-        .range(["#045A8D", "#F1EEF6"]);
+        .range(["#3949ab", "#e8eaf6"]);
 
     var context_color = "#FC8D59";
     var context_idx = 0;
@@ -330,6 +334,8 @@ var Chart = function(year, class_name, genre, type) {
             .attr("d", function(d) { return area2(d.values); })
             .style("fill", function(d) { return context_color; });
 
+        context.selectAll("g").remove();
+
         context.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height2 + ")")
@@ -392,16 +398,43 @@ var Chart = function(year, class_name, genre, type) {
         for (var idx in y1) {
             for (var jdx in y1[idx]) {
                 if (typeof layers[idx] == 'undefined') {
-                    a =  data['musics'][idx][1];
-                    layers[idx] = {title : data['musics'][idx][2],
-                                   url : data['musics'][idx][1][0],
-                                   code : data['musics'][idx][0],
-                                   type : node_type,
-                                   idx : idx,values:[]};
-                    layers0[idx] = {title : data['musics'][idx][1],
+                    if (class_name == 'people') {
+                        artist_code = data['musics'][idx][0].toString();
+
+                        if (artist_code.length == 5)
+                            a = "0"+artist_code.slice(0,2);
+                        else if (artist_code.length == 4)
+                            a = "00"+artist_code.slice(0,1);
+                        else
+                            a = artist_code.slice(0,3);
+                        layers[idx] = {title: data['musics'][idx][1],
+                                       code : artist_code,
+                                       type : node_type,
+                                       url : "http://image.music.naver.net/artist/240/000/"+a+"/"+artist_code+".jpg",
+                                       idx : idx,values:[]};
+                        layers0[idx] = {title: data['musics'][idx][1],
+                                       code : artist_code,
+                                       type : node_type,
+                                       url : "http://image.music.naver.net/artist/240/000/"+a+"/"+artist_code+".jpg",
+                                       idx : idx,values:[]};
+                    } else {
+                        layers[idx] = {title: data['musics'][idx][1],
+                                    artist: data['musics'][idx][2],
+                                    album_id: data['musics'][idx][3],
+                                    artist_id: data['musics'][idx][4],
+                                    url : "http://image.music.naver.net/album/204/000/"+data['musics'][idx][3].toString().slice(0,3)+"/"+data['musics'][idx][3]+".jpg",
                                     code : data['musics'][idx][0],
                                     type : node_type,
                                     idx : idx,values:[]};
+                        layers0[idx] = {title: data['musics'][idx][1],
+                                    artist: data['musics'][idx][2],
+                                    album_id: data['musics'][idx][3],
+                                    artist_id: data['musics'][idx][4],
+                                    url : "http://image.music.naver.net/album/204/000/"+data['musics'][idx][3].toString().slice(0,3)+"/"+data['musics'][idx][3]+".jpg",
+                                    code : data['musics'][idx][0],
+                                    type : node_type,
+                                    idx : idx,values:[]};
+                    }
                 }
                 tmp = y1[idx][jdx];
                 tmp = 1.0/tmp == Infinity ? 0 : 1.0/tmp;
@@ -462,7 +495,7 @@ var Chart = function(year, class_name, genre, type) {
                 win.focus();
             })
             .on("mouseover", function(d, i) {
-                change_poster_specific(d.title, d.code, d.url);
+                change_poster_specific(d.title, d.code, d.url, d.artist, d.artist_id, d.album_id);
                 /*svg.selectAll(".layer")
                     .attr("opacity", function(d, j) {
                         return j != i ? 0.8 : 1;
@@ -586,19 +619,31 @@ var Chart = function(year, class_name, genre, type) {
 
     var change_poster = function() {
         $("#title").text(layers[context_idx].title);
-        if (layers[context_idx].type == 0)
-            $("#naver-link").attr('href', "http://music.naver.com/music/bi/mi/basic.nhn?code="+layers[context_idx].code);
-        else
-            $("#naver-link").attr('href', "http://music.naver.com/music/bi/pi/basic.nhn?code="+layers[context_idx].code);
+
+        var data = layers[context_idx];
+        if (layers[context_idx].type == 0) {
+            $("#naver-link").attr('href', "http://music.naver.com/album/index.nhn?albumId="+data.album_id+"&trackId="+data.code);
+            $("#artist").attr('href', "http://music.naver.com/artist/home.nhn?artistId="+data.artist_id);
+            $("#artist").text(data.artist);
+        } else {
+            $("#naver-link").attr('href', "http://music.naver.com/artist/home.nhn?artistId="+data.code);
+            $("#artist").text('')
+            $("#artist").attr('href', "");
+        }
         $("#poster").attr('src', layers[context_idx].url);
     }
 
-    var change_poster_specific = function(title, code, url) {
+    var change_poster_specific = function(title, code, url, artist, artist_id, album_id) {
         $("#title").text(title);
-        if (class_name == 'people')
-            $("#naver-link").attr('href', "http://music.naver.com/music/bi/pi/basic.nhn?code="+code);
-        else
-            $("#naver-link").attr('href', "http://music.naver.com/music/bi/mi/basic.nhn?code="+code);
+        if (class_name != 'people') {
+            $("#naver-link").attr('href', "http://music.naver.com/album/index.nhn?albumId="+album_id+"&trackId="+code);
+            $("#artist").attr('href', "http://music.naver.com/artist/home.nhn?artistId="+artist_id);
+            $("#artist").text(artist);
+        } else {
+            $("#naver-link").attr('href', "http://music.naver.com/artist/home.nhn?artistId="+code);
+            $("#artist").text('')
+            $("#artist").attr('href', "");
+        }
         $("#poster").attr('src', url);
     }
 };
@@ -620,7 +665,7 @@ var update_people = function(type) {
     $(".people").each(function() {
         year = $(this).attr('id');
 
-        chart = new Chart(year, 'people', 'people', type);
+        chart = new Chart(year, 'people', 'artist', type);
         chart.set_cidx(charts2.length);
         charts2.push(chart);
     });
@@ -629,3 +674,4 @@ var update_people = function(type) {
 }
 
 update_music('total', 'wiggle');
+update_people('people');

@@ -21,6 +21,7 @@ for chart_type in ['total', 'domestic', 'oversea']:
         album_id = {}
         artist_id = {}
         track_id = {}
+        artist = {}
 
         start_year = '%s0101' % year
         end_year  = '%s1231' % year
@@ -35,6 +36,7 @@ for chart_type in ['total', 'domestic', 'oversea']:
                 music_title[code] = i['name']
                 album_id[code] = i['album_id']
                 artist_id[code] = i['artist_id']
+                artist[code] = i['artist']
                 track_id[code] = i['track_id']
                 dates[int(i['date'])] += 1
 
@@ -66,6 +68,7 @@ for chart_type in ['total', 'domestic', 'oversea']:
                 date = dates.index(int(i['date']))
                 new_music_title[new_code] = [code,
                                              music_title[code],
+                                             artist[code],
                                              album_id[code],
                                              artist_id[code],
                                              track_id[code],
