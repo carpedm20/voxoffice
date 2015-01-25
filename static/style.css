@@ -107,6 +107,25 @@ ul.side-nav li a {
   padding-left: 50px;
 }
 
+.yir-generic-music {
+  position: relative;
+  background: #e8eaf6;
+  width: 100%;
+  height: 100%;
+  color: #9ab;
+}
+
+.nav-bar-music {
+  background: rgba(65,91,118,.95);
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding-right: 50px;
+  padding-left: 50px;
+}
+
 .text p {
   font-family: Vollkorn, Georgia,serif;
   font-size: 24px;

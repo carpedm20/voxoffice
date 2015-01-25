@@ -24,7 +24,7 @@ def make_urls(mode = "TOTAL"):
     base = "http://music.naver.com/listen/history/index.nhn?type=%s&year=%s&month=%s&week=%s"
     urls = []
 
-    for year in xrange(2008, 2014):
+    for year in xrange(2008, 2015):
         for month in xrange(1, 13):
             for week in xrange(1,5):
                 url = base % (mode, year, month, week)

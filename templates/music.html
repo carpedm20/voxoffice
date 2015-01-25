@@ -1,22 +1,22 @@
 {% extends "layout.html" %}
 
 {% block navbar %}
-<li><a href="/carpedm20/music">VoxMusic</a></li>
+<li><a href="/carpedm20/vox">VoxOffice</a></li>
 {% endblock %}
 
 {% block script %}
-<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='music.js') }}"></script>
 {% endblock %}
 
 {% block intro %}
 <div class="row">
   <div class="section">
-    <h1 class="header center orange-text logo-text">VoxOffice</h1>
+    <h1 class="header center indigo-text logo-text">VoxMusic</h1>
     <div class="row center text">
-      <p class="col s12 light">A Data Visualization of Box Office History.<br/>"What was the greatest movies in 2007?"</p>
+      <p class="col s12 light blue-grey-text">A Data Visualization of Music Chart History.<br/>"What was the famous music in 2007?"</p>
     </div>
     <div class="row center">
-      <p class="footnote">Streamgraph algorithm, colors, and data generation inspired by <a href="http://www.leebyron.com/else/streamgraph/">this paper</a></p>
+      <p class="footnote blue-grey-text">Streamgraph algorithm, colors, and data generation inspired by <b><a class="indigo-text" href="http://www.leebyron.com/else/streamgraph/">this paper</a></b></p>
       <p class="red-text accent-1">* View on Desktop, not on Mobile *</p>
       <a href="https://github.com/carpedm20/voxoffice" target="_blank" class="waves-effect waves-light blue-grey darken-3 btn">Github</a>
       <p class="dark-grey accent-1"><b>Scroll down</b> to enjoy yourself :)</p>
@@ -26,7 +26,7 @@
 
 <div class="row">
   <div class="section">
-    <h2 class="header center orange-text">How to read?</h2>
+    <h2 class="header center indigo-text">How to read?</h2>
     <br/>
     <div class="container">
       <div class="col s6">
@@ -64,7 +64,7 @@
 
 <div class="row">
   <div class="section">
-    <h2 class="header center orange-text ko">그래프 읽는법</h2>
+    <h2 class="header center indigo-text ko">그래프 읽는법</h2>
     <br/>
     <div class="container">
       <div class="col s6">
@@ -123,11 +123,9 @@
     <label>Genre</label>
     <br/>
     <br/>
-    <a id="all" class="waves-effect waves-light genre btn teal">All</a>
-    <a id="romance" class="waves-effect waves-light genre btn">Romance</a>
-    <a id="action" class="waves-effect waves-light genre btn">Action</a>
-    <a id="thriller" class="waves-effect waves-light genre btn">Thriller</a>
-    <a id="comedy" class="waves-effect waves-light genre btn">Comedy</a>
+    <a id="all" class="waves-effect waves-light genre btn cyan">All</a>
+    <a id="domestic" class="waves-effect waves-light genre blue-grey btn">Domestic</a>
+    <a id="oversea" class="waves-effect waves-light genre blue-grey btn">Oversea</a>
   </div>
   <div class="row">
     <form id="graph-style" action="#">
@@ -175,7 +173,7 @@
 <div id="fullpage">
   {% for year in years %}
   <div class="section" id="mov-{{year}}">
-    <h2 class="header center orange-text ubuntu">Movie of {{year}}</h2>
+    <h2 class="header center indigo-text ubuntu">Music of {{year}}</h2>
     <div id="all-{{year}}" class="foxoffice">
       <div class="row center loading" width="1085" height="620">
         <div class="preloader-wrapper big active">
@@ -195,7 +193,7 @@
     </div>
   </div>
   <div class="section" id="peo-{{year}}">
-    <h2 class="header center orange-text ubuntu">People of {{year}}</h2>
+    <h2 class="header center indigo-text ubuntu">Artist of {{year}}</h2>
     <div id="people-{{year}}" class="people">
       <div class="row center loading" width="1085" height="620">
         <div class="preloader-wrapper big active">

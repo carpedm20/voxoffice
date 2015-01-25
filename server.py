@@ -21,17 +21,21 @@ def index():
     years = [re.findall(r'\d+',year)[0] for year in years]
     years.sort(reverse=True)
 
-    return render_template('index.html', years = years)
+    return render_template('index.html', years = years,
+                                         body_class = 'yir-generic',
+                                         nav_bar_class = 'nav-bar')
 
-@app.route('/carpedm20/vox/music')
+@app.route('/carpedm20/music/')
 def music():
     global PREFIX, STATIC
 
-    years = glob("./static/music-*.json")
+    years = glob("./static/total-*.json")
     years = [re.findall(r'\d+',year)[0] for year in years]
     years.sort(reverse=True)
 
-    return render_template('index.html', years = years)
+    return render_template('music.html', years = years,
+                                         body_class = 'yir-generic-music',
+                                         nav_bar_class = 'nav-bar-music')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
