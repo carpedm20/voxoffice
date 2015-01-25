@@ -1,5 +1,16 @@
 {% extends "layout.html" %}
 
+{% block meta %}
+<meta name="keywords" content="voxoffice,carpedm20,movie,visualization" >
+<meta name="description" content="A Data Visualization of Box Office History" >
+<meta property="og:title" content="VoxOffice" />
+<meta property="og:url" content="http://pail.unist.ac.kr/carpedm20/vox/"/>
+<meta property="og:image" content="https://raw.githubusercontent.com/carpedm20/voxoffice/master/static/logo.png" />
+<meta content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+
+<title>VoxOffice</title>
+{% endblock %}
+
 {% block css %}
 .x.axis g text {
   fill: white;
@@ -172,7 +183,7 @@
     </div>
   </div>-->
   <div class="row center">
-    <div class="fb-like" data-href="http://pail.unist.ac.kr/carpedm20/vox/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+    <div class="fb-like" data-href="{{ fb_href }}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
   </div>
 </div>
 {% endblock %}

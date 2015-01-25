@@ -22,6 +22,7 @@ def index():
     years.sort(reverse=True)
 
     return render_template('index.html', years = years,
+                                         fb_href = "http://pail.unist.ac.kr/carpedm20/vox/",
                                          body_class = 'yir-generic',
                                          nav_bar_class = 'nav-bar',
                                          footer = 'darken-1')
@@ -35,9 +36,10 @@ def music():
     years.sort(reverse=True)
 
     return render_template('music.html', years = years,
+                                         fb_href = "http://pail.unist.ac.kr/carpedm20/music/",
                                          body_class = 'yir-generic-music',
                                          nav_bar_class = 'nav-bar-music',
                                          footer = 'lighten-2')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=True, port=5000)

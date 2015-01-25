@@ -1,5 +1,16 @@
 {% extends "layout.html" %}
 
+{% block meta %}
+<meta name="keywords" content="voxmusic,carpedm20,music,visualization" >
+<meta name="description" content="A Data Visualization of Music Chart History" >
+<meta property="og:title" content="VoxMusic" />
+<meta property="og:url" content="http://pail.unist.ac.kr/carpedm20/music/"/>
+<meta property="og:image" content="https://raw.githubusercontent.com/carpedm20/voxoffice/master/static/music_logo.png" />
+<meta content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+
+<title>VoxMusic</title>
+{% endblock %}
+
 {% block css %}
 .x.axis g text {
   fill: #34495e;
@@ -36,46 +47,50 @@
     <h2 class="header center indigo-text">How to read?</h2>
     <br/>
     <div class="container">
-      <div class="col s6">
-        <div class="card info-card blue-grey lighten-2">
-          <div class="card-content white-text center">
-            <span class="card-title">The bigger, the better (Daily)</span>
-            <div class="row"></div>
-            <div class="center">
-              <img src="{{ url_for('static', filename='weight.png') }}" style="width: 80%;">
+      <div class="col s12">
+        <div class="col s6">
+          <div class="card info-card blue-grey lighten-2">
+            <div class="card-content white-text center">
+              <span class="card-title">The bigger, the better (Daily)</span>
+              <div class="row"></div>
+              <div class="center">
+                <img src="{{ url_for('static', filename='weight.png') }}" style="width: 80%;">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col s6">
+          <div class="card info-card blue-grey lighten-2">
+            <div class="card-content white-text center">
+              <span class="card-title">The darker, the better (Yearly)</span>
+              <div class="row"></div>
+              <div class="col s12">
+                <img src="{{ url_for('static', filename='music_color.png') }}" style="width:80%">
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col s6">
-        <div class="card info-card blue-grey lighten-2">
-          <div class="card-content white-text center">
-            <span class="card-title">The darker, the better (Yearly)</span>
-            <div class="row"></div>
-            <div class="col s12">
-              <img src="{{ url_for('static', filename='color.png') }}" style="width:80%">
+      <div class="col s12">
+        <div class="col s6">
+          <div class="card info-card blue-grey lighten-2">
+            <div class="card-content white-text center">
+              <span class="card-title ko-title ko">두꺼울수록 인기가 있었던 음악 (하루 기준)</span>
+              <div class="row"></div>
+              <div class="center">
+                <img src="{{ url_for('static', filename='weight_ko.png') }}" style="width: 80%;">
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col s6">
-        <div class="card info-card blue-grey lighten-2">
-          <div class="card-content white-text center">
-            <span class="card-title ko-title ko">두꺼울수록 인기가 있었던 영화 (하루 기준)</span>
-            <div class="row"></div>
-            <div class="center">
-              <img src="{{ url_for('static', filename='weight_ko.png') }}" style="width: 80%;">
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col s6">
-        <div class="card info-card blue-grey lighten-2">
-          <div class="card-content white-text center">
-            <span class="card-title ko-title ko">진할수록 인기가 있었던 영화 (1년 기준)</span>
-            <div class="row"></div>
-            <div class="col s12">
-              <img src="{{ url_for('static', filename='color_ko.png') }}" style="width:80%">
+        <div class="col s6">
+          <div class="card info-card blue-grey lighten-2">
+            <div class="card-content white-text center">
+              <span class="card-title ko-title ko">진할수록 인기가 있었던 음악 (1년 기준)</span>
+              <div class="row"></div>
+              <div class="col s12">
+                <img src="{{ url_for('static', filename='music_color_ko.png') }}" style="width:80%">
+              </div>
             </div>
           </div>
         </div>
@@ -100,8 +115,8 @@
           <div class="card-content center blue-grey-text">
               <span id="title" class="ko">carpedm20</span>
           </div>
-          <div class="card-action center blue-grey-text">
-              <a id="artist" href='#' target="_blank" class="blue-grey-text">carpedm20</a>
+          <div id="artist" class="card-action center blue-grey-text">
+            carpedm20
           </div>
         </a>
       </div>
@@ -152,7 +167,7 @@
     </div>
   </div>-->
   <div class="row center">
-    <div class="fb-like" data-href="http://pail.unist.ac.kr/carpedm20/vox/" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+    <div class="fb-like" data-href="{{ fb_href }}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
   </div>
 </div>
 {% endblock %}
