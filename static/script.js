@@ -263,7 +263,7 @@ var Chart = function(year, class_name, genre, type) {
     this.zero_transition = function() {
         this.type = 'zero';
         zer = zero_stack(layers);
-        y.domain([0, d3.max(zer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })+0.5]);
+        y.domain([0, d3.max(zer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })+1.5]);
         focus.selectAll(".layer")
             .data(function() {
                 return zer;
@@ -422,7 +422,7 @@ var Chart = function(year, class_name, genre, type) {
             y.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); })]);
         } else {
             var stacked_layer = zero_stack(layers);
-            y.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); }) + 0.5]);
+            y.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.y0 + d.y; }); }) + 1.5]);
         }
 
         x.domain([0, d3.max(stacked_layer, function(layer) { return d3.max(layer.values, function(d) { return  d.x; }); })]);
