@@ -42,7 +42,7 @@ $(document).ready(function() {
             current_section = nextIndex;
             console.log(current_section);
 
-            var chart = charts[current_section-4];
+            var chart = charts[current_section-3];
 
             if (global_type == 'zero' && chart.type == 'wiggle') {
                 chart.zero_transition();
@@ -112,7 +112,7 @@ $(document).ready(function() {
     $("#sticker").css('height', $(".section").height());
 
     $('#graph-style input:radio').change( function(){
-        var chart = charts[current_section-4];
+        var chart = charts[current_section-3];
 
         var type = $(this).attr('id');
 
