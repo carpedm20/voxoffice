@@ -25,6 +25,6 @@ A Data Visualization of Music chart history. [link](http://pail.unist.ac.kr/carp
 Copyright
 ---------
 
-Copyright :copyright: 2015 Kim Tae Hoon.
+Copyright :copyright: 2015 [Kim Tae Hoon](carpedm20.github.io)
 
 The MIT License (MIT)
