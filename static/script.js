@@ -331,6 +331,13 @@ var Chart = function(year, class_name, genre, type) {
             .style("fill", function(d) { return context_color; });
 
         context.selectAll("g").remove();
+
+        context.append("g")
+            .attr("class", "x brush")
+            .call(brush)
+        .selectAll("rect")
+            .attr("y", -6)
+            .attr("height", height2 + 7);
         context.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height2 + ")")
