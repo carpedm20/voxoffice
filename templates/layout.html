@@ -17,7 +17,7 @@
   end  : 2015-??-??
   -->
 
-  <link rel="stylesheet" href="http://cdn.smtcs.rocks/md/md.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='materialize.min.css') }}">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/jquery.fullpage/2.5.0/jquery.fullPage.min.css">
   <link href='http://fonts.googleapis.com/css?family=Vollkorn' rel='stylesheet' type='text/css'>
@@ -46,19 +46,12 @@
             }(document, 'script', 'facebook-jssdk'));</script>
     <nav class="{{ nav_bar_class }}">
       <div class="nav-wrapper">
-        <div class="col s12">
           <a href="http://carpedm20.github.io/" class="brand-logo">carpedm20</a>
-          <ul class="side-nav">
-            <!--<li style="margin-right: 15px;"> Search : </li>
-            <li>
-              <input id="icon_prefix" type="text" class="validate">
-            </li>
-            <li><a href="http://pail.unist.ac.kr/carpedm20/vec/">Vec2movie</a></li>-->
+          <ul class="menu right">
             {% block navbar %}{% endblock %}
             <li><a href="http://pail.unist.ac.kr/carpedm20/critic/">All about Critics</a></li>
             <li><a href="http://pail.unist.ac.kr:8080/">ReviewDuk</a></li>
           </ul>
-        </div>
       </div>
     </nav>
 
